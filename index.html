@@ -677,7 +677,8 @@
             display: none;
             position: relative;
             min-height: 100vh;
-            padding: var(--space) 0;
+            width: 100%;
+            overflow-x: hidden;
         }
 
         .main-content.active {
@@ -702,28 +703,6 @@
             }
         }
 
-        .wallet-balance-card::before,
-        .wallet-balance-card::after {
-            content: '';
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            border: 2px solid rgba(138, 43, 226, 0.8);
-        }
-
-        .wallet-balance-card::before {
-            top: -2px;
-            left: -2px;
-            border-right: none;
-            border-bottom: none;
-        }
-
-        .wallet-balance-card::after {
-            bottom: -2px;
-            right: -2px;
-            border-left: none;
-            border-top: none;
-        }
 
         .wallet-label {
             color: var(--accent2);
@@ -796,13 +775,14 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(10, 10, 15, 0.8);
+            background: rgba(16, 18, 37, 0.95);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 10;
             opacity: 1;
             transition: opacity 0.5s ease;
+            border-radius: var(--radius);
         }
 
         .initializing-overlay.hidden {
@@ -811,10 +791,10 @@
         }
 
         .init-text {
-            color: rgba(138, 43, 226, 0.9);
-            font-size: 1.2rem;
+            color: var(--accent2);
+            font-size: clamp(14px, 4vw, 18px);
             text-transform: uppercase;
-            letter-spacing: 0.2em;
+            letter-spacing: 0.1em;
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -828,10 +808,10 @@
         .init-dot {
             width: 8px;
             height: 8px;
-            background: rgba(84, 213, 146, 0.8);
+            background: var(--accent);
             border-radius: 50%;
             animation: dotPulse 1.4s ease-in-out infinite;
-            box-shadow: 0 0 10px rgba(84, 213, 146, 0.6);
+            box-shadow: var(--shadow);
         }
 
         .init-dot:nth-child(2) {
@@ -864,6 +844,8 @@
             opacity: 0;
             transform: translateY(-20px) scale(0.95);
             box-sizing: border-box;
+            position: relative;
+            width: 100%;
         }
 
         .begin-message.active {
@@ -1032,39 +1014,42 @@
         }
 
         .accordion-header {
-            background: rgba(138, 43, 226, 0.1);
-            border: 1px solid rgba(138, 43, 226, 0.3);
-            padding: 1rem 1.5rem;
+            background: rgba(155, 93, 229, 0.1);
+            border: 1px solid rgba(155, 93, 229, 0.3);
+            padding: calc(var(--space) * 0.75) var(--space);
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
             transition: all 0.3s ease;
-            margin-bottom: 0.5rem;
+            margin-bottom: calc(var(--space) * 0.5);
+            border-radius: calc(var(--radius) - 4px);
         }
 
         .accordion-header:hover {
-            background: rgba(138, 43, 226, 0.2);
-            border-color: rgba(138, 43, 226, 0.5);
+            background: rgba(155, 93, 229, 0.2);
+            border-color: rgba(155, 93, 229, 0.5);
         }
 
         .accordion-header.active {
-            background: rgba(138, 43, 226, 0.2);
-            border-color: rgba(138, 43, 226, 0.6);
+            background: rgba(155, 93, 229, 0.2);
+            border-color: rgba(155, 93, 229, 0.6);
         }
 
         .accordion-title {
-            color: rgba(138, 43, 226, 0.9);
-            font-size: 1rem;
+            color: var(--accent2);
+            font-size: clamp(13px, 3.5vw, 15px);
             text-transform: uppercase;
             letter-spacing: 0.1em;
             font-weight: bold;
         }
 
         .accordion-icon {
-            color: rgba(84, 213, 146, 0.9);
-            font-size: 1.2rem;
+            color: var(--accent);
+            font-size: clamp(14px, 4vw, 16px);
             transition: transform 0.3s ease;
+            flex-shrink: 0;
+            margin-left: var(--space);
         }
 
         .accordion-header.active .accordion-icon {
@@ -1075,18 +1060,22 @@
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease, padding 0.3s ease;
-            padding: 0 1.5rem;
+            padding: 0 var(--space);
         }
 
         .accordion-content.active {
             max-height: 500px;
-            padding: 1rem 1.5rem;
+            padding: var(--space);
         }
 
         .accordion-body {
-            color: rgba(84, 213, 146, 0.9);
-            font-size: 0.95rem;
+            color: var(--fg);
+            font-size: clamp(13px, 3.5vw, 15px);
             line-height: 1.8;
+        }
+        
+        .accordion-body p {
+            margin-bottom: calc(var(--space) * 0.5);
         }
 
         .rules-section {
@@ -1148,7 +1137,7 @@
         }
 
         .begin-button {
-            padding: 14px;
+            padding: 14px 24px;
             font-size: clamp(14px, 4vw, 16px);
             font-family: inherit;
             background: #0e1420;
@@ -1161,8 +1150,9 @@
             transition: all 0.2s ease;
             border-radius: calc(var(--radius) - 4px);
             width: 100%;
-            max-width: 200px;
+            max-width: 250px;
             margin: 0 auto;
+            display: block;
         }
 
         .begin-button-yes {
@@ -1328,7 +1318,7 @@
         .community-links {
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: var(--space);
         }
 
         .community-link {
@@ -1773,7 +1763,7 @@
         @keyframes closeRules {
             to {
                 opacity: 0;
-                transform: translate(-50%, -50%) scale(0.8);
+                transform: scale(0.8);
             }
         }
 
@@ -1812,13 +1802,9 @@
             }
 
             .wallet-balance-card {
-                min-width: 90%;
-                max-width: 95%;
-                padding: 2rem 1.5rem;
-                margin: 1rem;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
+                width: 100%;
+                position: relative;
+                margin: var(--space) 0;
             }
 
             .balance-amount {
@@ -1826,14 +1812,9 @@
             }
 
             .begin-message {
-                min-width: 90%;
-                max-width: 95%;
-                padding: 2rem 1.5rem;
-                top: auto;
-                bottom: 2rem;
-                left: 50%;
-                transform: translateX(-50%);
-                position: fixed;
+                width: 100%;
+                position: relative;
+                margin-top: var(--space);
             }
 
             .begin-text {
@@ -1842,14 +1823,9 @@
             }
 
             .rules-box {
-                min-width: 95%;
-                max-width: 95%;
-                padding: 2rem 1.5rem;
-                max-height: 90vh;
-                margin: 1rem;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
+                width: 100%;
+                position: relative;
+                max-height: 85vh;
                 overflow-y: auto;
                 -webkit-overflow-scrolling: touch;
             }
@@ -1864,11 +1840,11 @@
             }
 
             .accordion-header {
-                padding: 0.9rem 1.2rem;
+                padding: calc(var(--space) * 0.75) var(--space);
             }
 
             .accordion-title {
-                font-size: 0.95rem;
+                font-size: clamp(13px, 3.5vw, 15px);
             }
 
             .timer-section {
@@ -1888,14 +1864,9 @@
             }
 
             .community-links-box {
-                min-width: 95%;
-                max-width: 95%;
-                padding: 2.5rem 1.5rem;
-                margin: 1rem;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                max-height: 90vh;
+                width: 100%;
+                position: relative;
+                max-height: 85vh;
                 overflow-y: auto;
                 -webkit-overflow-scrolling: touch;
             }
@@ -1958,9 +1929,8 @@
             }
 
             .wallet-balance-card {
-                min-width: 95%;
-                max-width: 98%;
-                padding: 1.5rem 1.2rem;
+                width: 100%;
+                position: relative;
             }
 
             .balance-amount {
@@ -1968,10 +1938,9 @@
             }
 
             .begin-message {
-                min-width: 95%;
-                max-width: 98%;
-                padding: 1.5rem 1.2rem;
-                bottom: 3%;
+                width: 100%;
+                position: relative;
+                margin-top: var(--space);
             }
 
             .begin-text {
@@ -1979,10 +1948,8 @@
             }
 
             .rules-box {
-                min-width: 98%;
-                max-width: 98%;
-                padding: 1.5rem 1.2rem;
-                margin: 0.5rem;
+                width: 100%;
+                position: relative;
             }
 
             .rules-title {
@@ -1990,11 +1957,11 @@
             }
 
             .accordion-header {
-                padding: 0.8rem 1rem;
+                padding: calc(var(--space) * 0.75) var(--space);
             }
 
             .accordion-title {
-                font-size: 0.85rem;
+                font-size: clamp(12px, 3.2vw, 14px);
             }
 
             .timer-display {
@@ -2007,10 +1974,8 @@
             }
 
             .community-links-box {
-                min-width: 98%;
-                max-width: 98%;
-                padding: 2rem 1.2rem;
-                margin: 0.5rem;
+                width: 100%;
+                position: relative;
             }
 
             .community-title {
@@ -2070,23 +2035,23 @@
             }
 
             .wallet-balance-card {
-                min-width: 96%;
-                padding: 1.5rem 1rem;
+                width: 100%;
+                position: relative;
             }
 
             .begin-message {
-                min-width: 96%;
-                padding: 1.5rem 1rem;
+                width: 100%;
+                position: relative;
             }
 
             .rules-box {
-                min-width: 96%;
-                padding: 1.5rem 1rem;
+                width: 100%;
+                position: relative;
             }
 
             .community-links-box {
-                min-width: 96%;
-                padding: 1.5rem 1rem;
+                width: 100%;
+                position: relative;
             }
 
             .dashboard {
