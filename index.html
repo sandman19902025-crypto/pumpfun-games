@@ -2790,7 +2790,8 @@
             // Method 1: Try direct RPC calls (some endpoints allow CORS)
             const directRpcEndpoints = [
                 'https://api.mainnet-beta.solana.com',
-                'https://rpc.ankr.com/solana'
+                'https://rpc.ankr.com/solana',
+                'https://solana-api.projectserum.com'
             ];
             
             for (const endpoint of directRpcEndpoints) {
@@ -2798,6 +2799,7 @@
                     console.log('Trying direct RPC:', endpoint);
                     const response = await fetch(endpoint, {
                         method: 'POST',
+                        mode: 'cors',
                         headers: {
                             'Content-Type': 'application/json',
                         },
@@ -2816,9 +2818,15 @@
                             console.log('✓ Balance fetched from', endpoint + ':', balanceInSOL, 'SOL');
                             return balanceInSOL;
                         }
+                    } else {
+                        console.log('✗ RPC', endpoint, 'returned status:', response.status);
                     }
                 } catch (error) {
-                    console.log('✗ Direct RPC', endpoint, 'failed (CORS?):', error.message);
+                    console.log('✗ Direct RPC', endpoint, 'failed:', error.message);
+                    // Check if it's a CORS error
+                    if (error.message.includes('CORS') || error.message.includes('Failed to fetch')) {
+                        console.log('  → CORS blocked, trying next method...');
+                    }
                     continue;
                 }
             }
