@@ -8,7 +8,8 @@ You're not in the correct directory!
 **Navigate to the Games folder:**
 
 ```bash
-cd /Users/lloyddwaah/Downloads/Games
+cd ~/Downloads/Games
+# OR use your project directory path
 ```
 
 Then check it works:
@@ -45,7 +46,7 @@ git push -u origin main
 
 ## Full Path Reference
 
-Your project is located at:
-**`/Users/lloyddwaah/Downloads/Games`**
+Your project is located in your Downloads folder:
+**`~/Downloads/Games`** or **`/Users/[your-username]/Downloads/Games`**
 
 Always `cd` to this folder before running git commands!
