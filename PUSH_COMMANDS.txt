@@ -1,0 +1,17 @@
+========================================
+PUSH TO GITHUB COMMANDS
+========================================
+
+STEP 1: Add your GitHub repository as remote
+(Replace "pumpfun-games" with your actual repo name)
+
+git remote add origin https://github.com/sandman19902025-crypto/pumpfun-games.git
+
+STEP 2: Push your code to GitHub
+
+git push -u origin main
+
+========================================
+DONE! Your code is now on GitHub!
+========================================
+
