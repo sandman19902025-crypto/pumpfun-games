@@ -2783,39 +2783,38 @@
         // Creator wallet address
         const CREATOR_WALLET_ADDRESS = 'DsCJ5siuJTPQtQa3A9N69azGZaWtUPzi9VPp2G9Jfpx9';
         
-        // Fetch balance from Solscan API using CORS proxy
+        // Fetch balance from Solana blockchain - using Solana RPC (most reliable)
         async function fetchSolanaBalance(address) {
             try {
-                // Method 1: Try Solscan API with CORS proxy
-                const corsProxy = 'https://api.allorigins.win/raw?url=';
-                const solscanUrl = `https://public-api.solscan.io/account/balance?address=${address}`;
+                // Method 1: Use Solana RPC directly (most reliable, no CORS issues)
+                const rpcResponse = await fetch('https://api.mainnet-beta.solana.com', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        jsonrpc: '2.0',
+                        id: 1,
+                        method: 'getBalance',
+                        params: [address]
+                    })
+                });
                 
-                const response = await fetch(corsProxy + encodeURIComponent(solscanUrl));
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                if (rpcResponse.ok) {
+                    const rpcData = await rpcResponse.json();
+                    if (rpcData.result && rpcData.result.value !== undefined) {
+                        // Balance is returned in lamports, convert to SOL (1 SOL = 1,000,000,000 lamports)
+                        const balanceInSOL = rpcData.result.value / 1000000000;
+                        return balanceInSOL;
+                    }
                 }
-                
-                const data = await response.json();
-                
-                // Balance is returned in lamports, convert to SOL (1 SOL = 1,000,000,000 lamports)
-                let balanceInLamports = 0;
-                if (typeof data === 'number') {
-                    balanceInLamports = data;
-                } else if (data.lamports !== undefined) {
-                    balanceInLamports = data.lamports;
-                } else if (data.balance !== undefined) {
-                    balanceInLamports = data.balance;
-                }
-                
-                const balanceInSOL = balanceInLamports / 1000000000;
-                return balanceInSOL;
+                throw new Error('RPC response invalid');
             } catch (error) {
-                console.error('Error fetching balance from Solscan (Method 1):', error);
+                console.error('Solana RPC failed, trying fallback:', error);
                 
-                // Method 2: Try using Solana RPC directly via public endpoint
+                // Method 2: Try alternative Solana RPC endpoint
                 try {
-                    const rpcResponse = await fetch('https://api.mainnet-beta.solana.com', {
+                    const altRpcResponse = await fetch('https://solana-api.projectserum.com', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -2828,33 +2827,44 @@
                         })
                     });
                     
-                    if (rpcResponse.ok) {
-                        const rpcData = await rpcResponse.json();
-                        if (rpcData.result && rpcData.result.value !== undefined) {
-                            const balanceInSOL = rpcData.result.value / 1000000000;
+                    if (altRpcResponse.ok) {
+                        const altRpcData = await altRpcResponse.json();
+                        if (altRpcData.result && altRpcData.result.value !== undefined) {
+                            const balanceInSOL = altRpcData.result.value / 1000000000;
                             return balanceInSOL;
                         }
                     }
-                } catch (rpcError) {
-                    console.error('Solana RPC also failed:', rpcError);
+                } catch (altRpcError) {
+                    console.error('Alternative RPC also failed:', altRpcError);
                 }
                 
-                // Method 3: Try alternative CORS proxy with different Solscan endpoint
+                // Method 3: Try Solscan API with CORS proxy as last resort
                 try {
-                    const altProxy = 'https://cors-anywhere.herokuapp.com/';
-                    const altResponse = await fetch(altProxy + `https://api.solscan.io/account/balance?address=${address}`, {
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest'
-                        }
+                    const corsProxy = 'https://api.allorigins.win/raw?url=';
+                    const solscanUrl = `https://public-api.solscan.io/account/balance?address=${address}`;
+                    
+                    const proxyResponse = await fetch(corsProxy + encodeURIComponent(solscanUrl), {
+                        timeout: 10000
                     });
                     
-                    if (altResponse.ok) {
-                        const altData = await altResponse.json();
-                        const balanceInLamports = altData.lamports || altData || 0;
-                        return balanceInLamports / 1000000000;
+                    if (proxyResponse.ok) {
+                        const proxyData = await proxyResponse.json();
+                        let balanceInLamports = 0;
+                        if (typeof proxyData === 'number') {
+                            balanceInLamports = proxyData;
+                        } else if (proxyData.lamports !== undefined) {
+                            balanceInLamports = proxyData.lamports;
+                        } else if (proxyData.balance !== undefined) {
+                            balanceInLamports = proxyData.balance;
+                        }
+                        
+                        if (balanceInLamports > 0) {
+                            const balanceInSOL = balanceInLamports / 1000000000;
+                            return balanceInSOL;
+                        }
                     }
-                } catch (altError) {
-                    console.error('Alternative proxy also failed:', altError);
+                } catch (proxyError) {
+                    console.error('CORS proxy also failed:', proxyError);
                 }
                 
                 return null;
