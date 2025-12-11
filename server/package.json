@@ -4,7 +4,9 @@
   "description": "Referral tracking API for pumpfun.games",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "setup-db": "node db/setup.js",
+    "dev": "node server.js"
   },
   "keywords": ["referral", "tracking", "api"],
   "author": "",

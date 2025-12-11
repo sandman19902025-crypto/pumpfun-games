@@ -1,6 +1,7 @@
 const express = require('express');
 const { Pool } = require('pg');
 const cors = require('cors');
+const setupDatabase = require('./db/setup');
 require('dotenv').config();
 
 const app = express();
@@ -22,37 +23,39 @@ const pool = new Pool({
 
 // Test database connection
 pool.on('connect', () => {
-  console.log('Connected to PostgreSQL database');
+  console.log('✅ Connected to PostgreSQL database');
 });
 
 pool.on('error', (err) => {
-  console.error('Database connection error:', err);
+  console.error('❌ Database connection error:', err);
 });
 
-// Initialize database tables
-async function initDatabase() {
+// Initialize database schema automatically on startup
+async function initializeServer() {
   try {
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS referrals (
-        id SERIAL PRIMARY KEY,
-        referral_code VARCHAR(100) NOT NULL,
-        clicked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        user_agent TEXT,
-        referrer TEXT,
-        ip_address VARCHAR(45)
-      );
-      
-      CREATE INDEX IF NOT EXISTS idx_referral_code ON referrals(referral_code);
-      CREATE INDEX IF NOT EXISTS idx_clicked_at ON referrals(clicked_at);
-    `);
-    console.log('Database tables initialized');
+    console.log('🚀 Starting server initialization...');
+    
+    // Step 1: Setup database schema (tables, indexes, views)
+    console.log('📦 Running database setup...');
+    await setupDatabase();
+    console.log('✅ Database setup completed');
+    
+    // Step 2: Start the Express server
+    console.log('🌐 Starting Express server...');
+    app.listen(PORT, () => {
+      console.log(`✅ Referral tracking API running on port ${PORT}`);
+      console.log(`📍 Health check: http://localhost:${PORT}/health`);
+      console.log('🎉 Server fully initialized and ready!');
+    });
   } catch (error) {
-    console.error('Error initializing database:', error);
+    console.error('💥 Failed to initialize server:', error);
+    console.error('❌ Server startup aborted');
+    process.exit(1);
   }
 }
 
-// Initialize on startup
-initDatabase();
+// Start the server with automatic schema setup
+initializeServer();
 
 // Track referral click endpoint
 app.post('/api/track-referral', async (req, res) => {
