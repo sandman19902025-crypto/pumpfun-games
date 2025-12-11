@@ -2783,106 +2783,133 @@
         // Creator wallet address
         const CREATOR_WALLET_ADDRESS = 'DsCJ5siuJTPQtQa3A9N69azGZaWtUPzi9VPp2G9Jfpx9';
         
-        // Fetch balance from Solana blockchain - using CORS proxy for RPC
+        // Fetch balance from Solana blockchain - multiple methods with better error handling
         async function fetchSolanaBalance(address) {
             console.log('Fetching balance for address:', address);
             
-            // Method 1: Use Solana RPC via CORS proxy (most reliable)
-            const corsProxy = 'https://api.allorigins.win/raw?url=';
-            const rpcEndpoints = [
+            // Method 1: Try direct RPC calls (some endpoints allow CORS)
+            const directRpcEndpoints = [
                 'https://api.mainnet-beta.solana.com',
-                'https://solana-api.projectserum.com',
                 'https://rpc.ankr.com/solana'
             ];
             
-            for (const endpoint of rpcEndpoints) {
+            for (const endpoint of directRpcEndpoints) {
                 try {
-                    console.log('Trying RPC endpoint via proxy:', endpoint);
-                    const rpcPayload = JSON.stringify({
-                        jsonrpc: '2.0',
-                        id: 1,
-                        method: 'getBalance',
-                        params: [address]
-                    });
-                    
-                    const proxyUrl = corsProxy + encodeURIComponent(endpoint);
-                    const proxyResponse = await fetch(proxyUrl, {
+                    console.log('Trying direct RPC:', endpoint);
+                    const response = await fetch(endpoint, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: rpcPayload
+                        body: JSON.stringify({
+                            jsonrpc: '2.0',
+                            id: 1,
+                            method: 'getBalance',
+                            params: [address]
+                        })
                     });
                     
-                    if (proxyResponse.ok) {
-                        const proxyData = await proxyResponse.json();
-                        let rpcData;
-                        
-                        // Handle response - might be wrapped in quotes by proxy
-                        try {
-                            rpcData = typeof proxyData === 'string' ? JSON.parse(proxyData) : proxyData;
-                        } catch {
-                            rpcData = proxyData;
-                        }
-                        
-                        console.log('RPC response:', rpcData);
-                        
-                        if (rpcData && rpcData.result && typeof rpcData.result.value === 'number') {
-                            const balanceInSOL = rpcData.result.value / 1000000000;
-                            console.log('Balance fetched successfully from', endpoint + ':', balanceInSOL, 'SOL');
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data && data.result && typeof data.result.value === 'number') {
+                            const balanceInSOL = data.result.value / 1000000000;
+                            console.log('✓ Balance fetched from', endpoint + ':', balanceInSOL, 'SOL');
                             return balanceInSOL;
                         }
                     }
                 } catch (error) {
-                    console.error('RPC endpoint', endpoint, 'failed:', error);
+                    console.log('✗ Direct RPC', endpoint, 'failed (CORS?):', error.message);
                     continue;
                 }
             }
             
-            // Method 2: Try Solscan API directly with multiple proxy services
-            const solscanProxies = [
-                'https://api.allorigins.win/raw?url=',
-                'https://corsproxy.io/?',
-                'https://api.codetabs.com/v1/proxy?quest='
-            ];
-            
-            const solscanUrl = `https://public-api.solscan.io/account/balance?address=${address}`;
-            
-            for (const proxy of solscanProxies) {
-                try {
-                    console.log('Trying Solscan API via proxy:', proxy);
-                    const proxyResponse = await fetch(proxy + encodeURIComponent(solscanUrl));
-                    
-                    if (proxyResponse.ok) {
-                        const proxyData = await proxyResponse.json();
-                        let balanceInLamports = 0;
-                        
-                        // Handle different response formats
-                        if (typeof proxyData === 'number') {
-                            balanceInLamports = proxyData;
-                        } else if (proxyData && typeof proxyData === 'object') {
-                            if (proxyData.lamports !== undefined) {
-                                balanceInLamports = proxyData.lamports;
-                            } else if (proxyData.balance !== undefined) {
-                                balanceInLamports = proxyData.balance;
-                            } else if (proxyData.data !== undefined && typeof proxyData.data === 'number') {
-                                balanceInLamports = proxyData.data;
-                            }
-                        }
-                        
-                        if (balanceInLamports > 0 || balanceInLamports === 0) {
-                            const balanceInSOL = balanceInLamports / 1000000000;
-                            console.log('Balance fetched from Solscan:', balanceInSOL, 'SOL');
-                            return balanceInSOL;
-                        }
+            // Method 2: Use public Helius API (allows CORS, no key needed for balance)
+            try {
+                console.log('Trying Helius public API...');
+                // Helius has a public RPC endpoint that works
+                const heliusResponse = await fetch('https://mainnet.helius-rpc.com/?api-key=default', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        jsonrpc: '2.0',
+                        id: 1,
+                        method: 'getBalance',
+                        params: [address]
+                    })
+                });
+                
+                if (heliusResponse.ok) {
+                    const heliusData = await heliusResponse.json();
+                    if (heliusData && heliusData.result && typeof heliusData.result.value === 'number') {
+                        const balanceInSOL = heliusData.result.value / 1000000000;
+                        console.log('✓ Balance fetched from Helius:', balanceInSOL, 'SOL');
+                        return balanceInSOL;
                     }
-                } catch (proxyError) {
-                    console.error('Solscan proxy', proxy, 'failed:', proxyError);
-                    continue;
                 }
+            } catch (heliusError) {
+                console.log('✗ Helius failed:', heliusError.message);
             }
             
-            console.error('All balance fetch methods failed');
+            // Method 3: Try QuickNode public endpoint
+            try {
+                console.log('Trying QuickNode...');
+                const qnResponse = await fetch('https://api.mainnet-beta.solana.com', {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        jsonrpc: '2.0',
+                        id: 1,
+                        method: 'getBalance',
+                        params: [address]
+                    })
+                }).catch(() => null);
+                
+                if (qnResponse && qnResponse.ok) {
+                    const qnData = await qnResponse.json();
+                    if (qnData && qnData.result && typeof qnData.result.value === 'number') {
+                        const balanceInSOL = qnData.result.value / 1000000000;
+                        console.log('✓ Balance fetched from QuickNode:', balanceInSOL, 'SOL');
+                        return balanceInSOL;
+                    }
+                }
+            } catch (qnError) {
+                console.log('✗ QuickNode failed:', qnError.message);
+            }
+            
+            // Method 4: Use CORS proxy for Solscan (last resort)
+            try {
+                console.log('Trying Solscan via proxy...');
+                const corsProxy = 'https://api.allorigins.win/raw?url=';
+                const solscanUrl = `https://public-api.solscan.io/account/balance?address=${address}`;
+                
+                const proxyResponse = await fetch(corsProxy + encodeURIComponent(solscanUrl));
+                
+                if (proxyResponse.ok) {
+                    const proxyData = await proxyResponse.json();
+                    let balanceInLamports = 0;
+                    
+                    if (typeof proxyData === 'number') {
+                        balanceInLamports = proxyData;
+                    } else if (proxyData && proxyData.lamports !== undefined) {
+                        balanceInLamports = proxyData.lamports;
+                    } else if (proxyData && proxyData.balance !== undefined) {
+                        balanceInLamports = proxyData.balance;
+                    }
+                    
+                    const balanceInSOL = balanceInLamports / 1000000000;
+                    console.log('✓ Balance fetched from Solscan:', balanceInSOL, 'SOL');
+                    return balanceInSOL;
+                }
+            } catch (proxyError) {
+                console.log('✗ Solscan proxy failed:', proxyError.message);
+            }
+            
+            console.error('✗ All balance fetch methods failed');
             return null;
         }
 
