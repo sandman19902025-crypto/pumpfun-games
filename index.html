@@ -2783,110 +2783,103 @@
         // Creator wallet address
         const CREATOR_WALLET_ADDRESS = 'DsCJ5siuJTPQtQa3A9N69azGZaWtUPzi9VPp2G9Jfpx9';
         
-        // Fetch balance from Solana blockchain - using Solana RPC (most reliable)
+        // Fetch balance from Solana blockchain - using CORS proxy for RPC
         async function fetchSolanaBalance(address) {
             console.log('Fetching balance for address:', address);
             
-            // Method 1: Use Solana RPC directly (most reliable, no CORS issues)
-            try {
-                console.log('Trying Solana mainnet RPC...');
-                const rpcResponse = await fetch('https://api.mainnet-beta.solana.com', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        jsonrpc: '2.0',
-                        id: 1,
-                        method: 'getBalance',
-                        params: [address]
-                    })
-                });
-                
-                if (rpcResponse.ok) {
-                    const rpcData = await rpcResponse.json();
-                    console.log('RPC response:', rpcData);
-                    
-                    if (rpcData.result && typeof rpcData.result.value === 'number') {
-                        // Balance is returned in lamports, convert to SOL (1 SOL = 1,000,000,000 lamports)
-                        const balanceInSOL = rpcData.result.value / 1000000000;
-                        console.log('Balance fetched successfully:', balanceInSOL, 'SOL');
-                        return balanceInSOL;
-                    } else if (rpcData.error) {
-                        console.error('RPC error:', rpcData.error);
-                    }
-                } else {
-                    console.error('RPC response not OK:', rpcResponse.status);
-                }
-            } catch (error) {
-                console.error('Solana mainnet RPC failed:', error);
-            }
-            
-            // Method 2: Try alternative Solana RPC endpoints (multiple fallbacks)
+            // Method 1: Use Solana RPC via CORS proxy (most reliable)
+            const corsProxy = 'https://api.allorigins.win/raw?url=';
             const rpcEndpoints = [
+                'https://api.mainnet-beta.solana.com',
                 'https://solana-api.projectserum.com',
-                'https://rpc.ankr.com/solana',
-                'https://solana.public-rpc.com'
+                'https://rpc.ankr.com/solana'
             ];
             
             for (const endpoint of rpcEndpoints) {
                 try {
-                    console.log('Trying RPC endpoint:', endpoint);
-                    const altRpcResponse = await fetch(endpoint, {
+                    console.log('Trying RPC endpoint via proxy:', endpoint);
+                    const rpcPayload = JSON.stringify({
+                        jsonrpc: '2.0',
+                        id: 1,
+                        method: 'getBalance',
+                        params: [address]
+                    });
+                    
+                    const proxyUrl = corsProxy + encodeURIComponent(endpoint);
+                    const proxyResponse = await fetch(proxyUrl, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify({
-                            jsonrpc: '2.0',
-                            id: 1,
-                            method: 'getBalance',
-                            params: [address]
-                        })
+                        body: rpcPayload
                     });
                     
-                    if (altRpcResponse.ok) {
-                        const altRpcData = await altRpcResponse.json();
-                        if (altRpcData.result && typeof altRpcData.result.value === 'number') {
-                            const balanceInSOL = altRpcData.result.value / 1000000000;
-                            console.log('Balance fetched from', endpoint + ':', balanceInSOL, 'SOL');
+                    if (proxyResponse.ok) {
+                        const proxyData = await proxyResponse.json();
+                        let rpcData;
+                        
+                        // Handle response - might be wrapped in quotes by proxy
+                        try {
+                            rpcData = typeof proxyData === 'string' ? JSON.parse(proxyData) : proxyData;
+                        } catch {
+                            rpcData = proxyData;
+                        }
+                        
+                        console.log('RPC response:', rpcData);
+                        
+                        if (rpcData && rpcData.result && typeof rpcData.result.value === 'number') {
+                            const balanceInSOL = rpcData.result.value / 1000000000;
+                            console.log('Balance fetched successfully from', endpoint + ':', balanceInSOL, 'SOL');
                             return balanceInSOL;
                         }
                     }
-                } catch (altRpcError) {
-                    console.error('RPC endpoint', endpoint, 'failed:', altRpcError);
+                } catch (error) {
+                    console.error('RPC endpoint', endpoint, 'failed:', error);
                     continue;
                 }
             }
             
-            // Method 3: Try Solscan API with CORS proxy as last resort
-            try {
-                console.log('Trying Solscan API via proxy...');
-                const corsProxy = 'https://api.allorigins.win/raw?url=';
-                const solscanUrl = `https://public-api.solscan.io/account/balance?address=${address}`;
-                
-                const proxyResponse = await fetch(corsProxy + encodeURIComponent(solscanUrl));
-                
-                if (proxyResponse.ok) {
-                    const proxyData = await proxyResponse.json();
-                    let balanceInLamports = 0;
+            // Method 2: Try Solscan API directly with multiple proxy services
+            const solscanProxies = [
+                'https://api.allorigins.win/raw?url=',
+                'https://corsproxy.io/?',
+                'https://api.codetabs.com/v1/proxy?quest='
+            ];
+            
+            const solscanUrl = `https://public-api.solscan.io/account/balance?address=${address}`;
+            
+            for (const proxy of solscanProxies) {
+                try {
+                    console.log('Trying Solscan API via proxy:', proxy);
+                    const proxyResponse = await fetch(proxy + encodeURIComponent(solscanUrl));
                     
-                    if (typeof proxyData === 'number') {
-                        balanceInLamports = proxyData;
-                    } else if (proxyData && proxyData.lamports !== undefined) {
-                        balanceInLamports = proxyData.lamports;
-                    } else if (proxyData && proxyData.balance !== undefined) {
-                        balanceInLamports = proxyData.balance;
+                    if (proxyResponse.ok) {
+                        const proxyData = await proxyResponse.json();
+                        let balanceInLamports = 0;
+                        
+                        // Handle different response formats
+                        if (typeof proxyData === 'number') {
+                            balanceInLamports = proxyData;
+                        } else if (proxyData && typeof proxyData === 'object') {
+                            if (proxyData.lamports !== undefined) {
+                                balanceInLamports = proxyData.lamports;
+                            } else if (proxyData.balance !== undefined) {
+                                balanceInLamports = proxyData.balance;
+                            } else if (proxyData.data !== undefined && typeof proxyData.data === 'number') {
+                                balanceInLamports = proxyData.data;
+                            }
+                        }
+                        
+                        if (balanceInLamports > 0 || balanceInLamports === 0) {
+                            const balanceInSOL = balanceInLamports / 1000000000;
+                            console.log('Balance fetched from Solscan:', balanceInSOL, 'SOL');
+                            return balanceInSOL;
+                        }
                     }
-                    
-                    if (balanceInLamports > 0) {
-                        const balanceInSOL = balanceInLamports / 1000000000;
-                        console.log('Balance fetched from Solscan:', balanceInSOL, 'SOL');
-                        return balanceInSOL;
-                    }
+                } catch (proxyError) {
+                    console.error('Solscan proxy', proxy, 'failed:', proxyError);
+                    continue;
                 }
-            } catch (proxyError) {
-                console.error('Solscan proxy failed:', proxyError);
             }
             
             console.error('All balance fetch methods failed');
@@ -2903,7 +2896,7 @@
             const address = CREATOR_WALLET_ADDRESS;
             let balanceFetched = false;
             
-            // Timeout after 8 seconds to prevent infinite loading (increased for better API success rate)
+            // Timeout after 10 seconds to prevent infinite loading (increased for better API success rate)
             const timeoutId = setTimeout(() => {
                 if (!balanceFetched) {
                     console.warn('Balance fetch timeout - proceeding with default');
@@ -2914,7 +2907,7 @@
                         showBeginMessage();
                     }, 600);
                 }
-            }, 8000);
+            }, 10000);
 
             // Show initializing overlay
             setTimeout(() => {
@@ -2924,7 +2917,7 @@
                 // Fetch real balance from Solana RPC (with longer timeout to ensure it loads)
                 Promise.race([
                     fetchSolanaBalance(address),
-                    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 7000))
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 9000))
                 ]).then(finalBalance => {
                     balanceFetched = true;
                     clearTimeout(timeoutId);
