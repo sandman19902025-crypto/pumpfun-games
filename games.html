@@ -2804,7 +2804,20 @@
         </div>
     </div>
 
+    <!-- Solana Web3.js Library -->
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+
     <script>
+        // Helius RPC Configuration
+        const HELIUS_API_KEY = 'e7f8cbe0-8718-46c2-9423-013252d80521';
+        const HELIUS_RPC_URL = `https://mainnet.helius-rpc.com/?api-key=${HELIUS_API_KEY}`;
+        
+        // Initialize Solana connection using Helius
+        let solanaConnection = null;
+        if (typeof solanaWeb3 !== 'undefined') {
+            solanaConnection = new solanaWeb3.Connection(HELIUS_RPC_URL, 'confirmed');
+        }
+
         const enterButton = document.getElementById('enterButton');
         const entryPage = document.getElementById('entryPage');
         const loadingPopup = document.getElementById('loadingPopup');
@@ -2934,35 +2947,93 @@
             }
         }
 
+        // Fetch balance from Solana using Helius RPC
+        async function fetchSolanaBalance(address) {
+            try {
+                if (!solanaConnection) {
+                    console.warn('Solana Web3.js not loaded, using fallback');
+                    return null;
+                }
+
+                const publicKey = new solanaWeb3.PublicKey(address);
+                const balance = await solanaConnection.getBalance(publicKey);
+                // Convert lamports to SOL (1 SOL = 1,000,000,000 lamports)
+                const solBalance = balance / 1_000_000_000;
+                return solBalance;
+            } catch (error) {
+                console.error('Error fetching balance from Helius:', error);
+                // Fallback: try direct RPC call
+                try {
+                    const response = await fetch(HELIUS_RPC_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            jsonrpc: '2.0',
+                            id: 1,
+                            method: 'getBalance',
+                            params: [address]
+                        })
+                    });
+                    const data = await response.json();
+                    if (data.result) {
+                        return data.result.value / 1_000_000_000;
+                    }
+                } catch (fallbackError) {
+                    console.error('Fallback RPC call also failed:', fallbackError);
+                }
+                return null;
+            }
+        }
+
         // Wallet balance initialization
-        function initializeWalletBalance() {
+        async function initializeWalletBalance() {
             const walletCard = document.getElementById('walletCard');
             const initOverlay = document.getElementById('initOverlay');
             const walletAddress = document.getElementById('walletAddress');
             const balanceAmount = document.getElementById('balanceAmount');
 
-            // Example wallet address (you can replace with actual address)
+            // Wallet address
             const address = '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU';
-            const finalBalance = 42.567; // Example balance in SOL
-
+            
             // Show initializing overlay
             setTimeout(() => {
                 // Update wallet address
                 walletAddress.textContent = address;
                 
-                // Start balance animation after a short delay
-                setTimeout(() => {
-                    animateBalance(0, finalBalance, balanceAmount, () => {
-                        // Hide initializing overlay when animation completes
-                        setTimeout(() => {
-                            initOverlay.classList.add('hidden');
-                            // Show begin message after a short delay
+                // Fetch real balance from Helius
+                fetchSolanaBalance(address).then(finalBalance => {
+                    // Use fetched balance or fallback to 0 if fetch failed
+                    const balance = finalBalance !== null ? finalBalance : 0;
+                    
+                    // Start balance animation after a short delay
+                    setTimeout(() => {
+                        animateBalance(0, balance, balanceAmount, () => {
+                            // Hide initializing overlay when animation completes
                             setTimeout(() => {
-                                showBeginMessage();
-                            }, 600);
-                        }, 500);
-                    });
-                }, 800);
+                                initOverlay.classList.add('hidden');
+                                // Show begin message after a short delay
+                                setTimeout(() => {
+                                    showBeginMessage();
+                                }, 600);
+                            }, 500);
+                        });
+                    }, 800);
+                }).catch(error => {
+                    console.error('Failed to fetch balance:', error);
+                    // Fallback to 0 balance if fetch fails
+                    setTimeout(() => {
+                        animateBalance(0, 0, balanceAmount, () => {
+                            setTimeout(() => {
+                                initOverlay.classList.add('hidden');
+                                setTimeout(() => {
+                                    showBeginMessage();
+                                }, 600);
+                            }, 500);
+                        });
+                    }, 800);
+                });
             }, 300);
         }
 
@@ -3120,27 +3191,43 @@
             type();
         }
 
-        function showDashboard() {
+        async function showDashboard() {
             dashboard.style.display = 'block';
             dashboard.classList.add('active');
             
-            // Set wallet balance from previous initialization
+            // Creator wallet address
+            const creatorWalletAddress = '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU';
+            
+            // Fetch creator wallet balance from Helius
+            try {
+                const creatorBalance = await fetchSolanaBalance(creatorWalletAddress);
+                if (creatorBalance !== null) {
+                    const balanceFormatted = creatorBalance.toLocaleString('en-US', {
+                        minimumFractionDigits: 3,
+                        maximumFractionDigits: 3
+                    });
+                    document.getElementById('walletTitleBalance').textContent = balanceFormatted;
+                    
+                    // Set rewards amount (you can customize this - for now using a portion of balance)
+                    const rewards = (creatorBalance * 0.1).toFixed(3);
+                    document.getElementById('rewardsAmount').textContent = parseFloat(rewards).toLocaleString('en-US', {
+                        minimumFractionDigits: 3,
+                        maximumFractionDigits: 3
+                    });
+                }
+            } catch (error) {
+                console.error('Failed to fetch creator wallet balance:', error);
+            }
+            
+            // Set wallet balance from previous initialization (user wallet)
             const balanceAmount = document.getElementById('balanceAmount');
             if (balanceAmount) {
                 const balance = balanceAmount.textContent;
-                document.getElementById('walletTitleBalance').textContent = balance;
-            }
-            
-            // Set rewards amount (you can customize this - for now using a portion of balance)
-            const balanceAmountEl = document.getElementById('balanceAmount');
-            if (balanceAmountEl) {
-                const balance = parseFloat(balanceAmountEl.textContent.replace(/,/g, ''));
-                // Example: rewards are 10% of balance (you can change this logic)
-                const rewards = (balance * 0.1).toFixed(3);
-                document.getElementById('rewardsAmount').textContent = parseFloat(rewards).toLocaleString('en-US', {
-                    minimumFractionDigits: 3,
-                    maximumFractionDigits: 3
-                });
+                // Only update if we don't have creator balance yet
+                if (!document.getElementById('walletTitleBalance').textContent || 
+                    document.getElementById('walletTitleBalance').textContent === '0.000') {
+                    document.getElementById('walletTitleBalance').textContent = balance;
+                }
             }
             
             // Play background music

@@ -50,3 +50,4 @@ Your project is located in your Downloads folder:
 **`~/Downloads/Games`** or **`/Users/[your-username]/Downloads/Games`**
 
 Always `cd` to this folder before running git commands!
+
