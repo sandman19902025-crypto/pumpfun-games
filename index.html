@@ -2862,23 +2862,51 @@
             }, 600);
         });
 
-        // Timer functionality
+        // Timer functionality - Persistent end time using localStorage
         let timerInterval;
-        function startTimer() {
-            // Set timer to 24 hours from now (or you can set a specific end time)
+        
+        // Get or set the next game time (persists across page loads)
+        function getNextGameTime() {
+            const stored = localStorage.getItem('nextGameTime');
             const now = new Date().getTime();
-            const nextGame = now + (24 * 60 * 60 * 1000); // 24 hours from now
             
-            // Or set to a specific time (e.g., midnight)
-            // const nextGame = new Date().setHours(24, 0, 0, 0);
+            if (stored) {
+                const storedTime = parseInt(stored, 10);
+                // If stored time is in the future, use it
+                if (storedTime > now) {
+                    return storedTime;
+                }
+            }
+            
+            // No stored time or it expired - set new time (next midnight)
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+            const nextGame = tomorrow.getTime();
+            
+            localStorage.setItem('nextGameTime', nextGame.toString());
+            return nextGame;
+        }
+        
+        function startTimer() {
+            let nextGame = getNextGameTime();
             
             function updateTimer() {
                 const now = new Date().getTime();
                 const distance = nextGame - now;
                 
                 if (distance < 0) {
-                    // Timer expired, reset to next 24 hours
-                    const newNextGame = now + (24 * 60 * 60 * 1000);
+                    // Timer expired, set new time for next 24 hours
+                    nextGame = getNextGameTime();
+                    // Update immediately with new time
+                    const newDistance = nextGame - now;
+                    const hours = Math.floor((newDistance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((newDistance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((newDistance % (1000 * 60)) / 1000);
+                    
+                    document.getElementById('timerHours').textContent = String(hours).padStart(2, '0');
+                    document.getElementById('timerMinutes').textContent = String(minutes).padStart(2, '0');
+                    document.getElementById('timerSeconds').textContent = String(seconds).padStart(2, '0');
                     return;
                 }
                 
@@ -3008,17 +3036,25 @@
         }
 
         function startDashboardTimer() {
-            // Set timer to 24 hours from now
-            const now = new Date().getTime();
-            const nextGame = now + (24 * 60 * 60 * 1000);
+            // Use the same persistent timer as the rules box timer
+            let nextGame = getNextGameTime();
             
             function updateDashboardTimer() {
                 const now = new Date().getTime();
                 const distance = nextGame - now;
                 
                 if (distance < 0) {
-                    // Timer expired, reset to next 24 hours
-                    const newNextGame = now + (24 * 60 * 60 * 1000);
+                    // Timer expired, set new time for next 24 hours
+                    nextGame = getNextGameTime();
+                    // Update immediately with new time
+                    const newDistance = nextGame - now;
+                    const hours = Math.floor((newDistance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((newDistance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((newDistance % (1000 * 60)) / 1000);
+                    
+                    document.getElementById('dashHours').textContent = String(hours).padStart(2, '0');
+                    document.getElementById('dashMinutes').textContent = String(minutes).padStart(2, '0');
+                    document.getElementById('dashSeconds').textContent = String(seconds).padStart(2, '0');
                     return;
                 }
                 
