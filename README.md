@@ -63,3 +63,4 @@ netlify deploy --prod
 - No build process needed - static site ready to deploy
 
 
+# pumpfun-games
