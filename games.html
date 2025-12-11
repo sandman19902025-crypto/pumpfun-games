@@ -1,0 +1,3258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    
+    <!-- Primary Meta Tags -->
+    <title>pumpfun.games - Daily Solana Games & Competitions</title>
+    <meta name="title" content="pumpfun.games - Daily Solana Games & Competitions">
+    <meta name="description" content="Compete in daily games on Solana blockchain. Win SOL prizes every 24 hours. Join pumpfun.games and participate in exciting competitions with automatic prize distribution.">
+    <meta name="keywords" content="pumpfun, solana, games, blockchain, crypto games, solana games, daily games, crypto competitions, SOL prizes, pump.fun, web3 games">
+    <meta name="author" content="pumpfun.games">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pumpfun.games/">
+    <meta property="og:title" content="pumpfun.games - Daily Solana Games & Competitions">
+    <meta property="og:description" content="Compete in daily games on Solana blockchain. Win SOL prizes every 24 hours. Join pumpfun.games and participate in exciting competitions with automatic prize distribution.">
+    <meta property="og:image" content="https://pumpfun.games/FORTAB.jpg">
+    <meta property="og:site_name" content="pumpfun.games">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://pumpfun.games/">
+    <meta name="twitter:title" content="pumpfun.games - Daily Solana Games & Competitions">
+    <meta name="twitter:description" content="Compete in daily games on Solana blockchain. Win SOL prizes every 24 hours. Join pumpfun.games and participate in exciting competitions.">
+    <meta name="twitter:image" content="https://pumpfun.games/FORTAB.jpg">
+    <meta name="twitter:creator" content="@ThePumpFunGames">
+    <meta name="twitter:site" content="@ThePumpFunGames">
+    
+    <!-- Additional Meta Tags -->
+    <meta name="theme-color" content="#8A2BE2">
+    <meta name="msapplication-TileColor" content="#8A2BE2">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="pumpfun.games">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://pumpfun.games/">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="FORTAB.jpg">
+    <link rel="shortcut icon" type="image/jpeg" href="FORTAB.jpg">
+    <link rel="apple-touch-icon" href="FORTAB.jpg">
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "pumpfun.games",
+        "description": "Daily Solana blockchain games and competitions with SOL prize distribution",
+        "url": "https://pumpfun.games",
+        "applicationCategory": "Game",
+        "operatingSystem": "Web",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "SOL"
+        },
+        "creator": {
+            "@type": "Organization",
+            "name": "pumpfun.games",
+            "url": "https://pumpfun.games"
+        },
+        "sameAs": [
+            "https://x.com/ThePumpFunGames"
+        ]
+    }
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            min-height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto;
+            background: #0a0a0f;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        html {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        /* Animated gradient background */
+        .background-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(138, 43, 226, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(84, 213, 146, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 50% 80%, rgba(138, 43, 226, 0.25) 0%, transparent 50%),
+                linear-gradient(135deg, #0a0a0f 0%, #1a0a1f 50%, #0a1a0f 100%);
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.9;
+                transform: scale(1.1);
+            }
+        }
+
+        /* Tech grid pattern */
+        .grid-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(138, 43, 226, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(138, 43, 226, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes gridMove {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(50px, 50px);
+            }
+        }
+
+        /* Animated particles */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float linear infinite;
+        }
+
+        .particle-purple {
+            background: rgba(138, 43, 226, 0.6);
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.8), 0 0 20px rgba(138, 43, 226, 0.4);
+        }
+
+        .particle-green {
+            background: rgba(84, 213, 146, 0.6);
+            box-shadow: 0 0 10px rgba(84, 213, 146, 0.8), 0 0 20px rgba(84, 213, 146, 0.4);
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh) translateX(100px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Scanning lines effect */
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(138, 43, 226, 0.5) 45%,
+                rgba(84, 213, 146, 0.5) 50%,
+                rgba(138, 43, 226, 0.5) 55%,
+                transparent 100%
+            );
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.8), 0 0 20px rgba(84, 213, 146, 0.6);
+            animation: scan 4s linear infinite;
+        }
+
+        @keyframes scan {
+            0% {
+                top: 0;
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                top: 100%;
+                opacity: 0;
+            }
+        }
+
+        /* Corner accents */
+        .corner-accent {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border: 2px solid;
+            pointer-events: none;
+        }
+
+        .corner-accent-top-left {
+            top: 0;
+            left: 0;
+            border-right: none;
+            border-bottom: none;
+            border-color: rgba(138, 43, 226, 0.6);
+            box-shadow: 
+                -2px -2px 10px rgba(138, 43, 226, 0.8),
+                -5px -5px 20px rgba(138, 43, 226, 0.4);
+            animation: pulseCorner 3s ease-in-out infinite;
+        }
+
+        .corner-accent-top-right {
+            top: 0;
+            right: 0;
+            border-left: none;
+            border-bottom: none;
+            border-color: rgba(84, 213, 146, 0.6);
+            box-shadow: 
+                2px -2px 10px rgba(84, 213, 146, 0.8),
+                5px -5px 20px rgba(84, 213, 146, 0.4);
+            animation: pulseCorner 3s ease-in-out infinite 1.5s;
+        }
+
+        .corner-accent-bottom-left {
+            bottom: 0;
+            left: 0;
+            border-right: none;
+            border-top: none;
+            border-color: rgba(84, 213, 146, 0.6);
+            box-shadow: 
+                -2px 2px 10px rgba(84, 213, 146, 0.8),
+                -5px 5px 20px rgba(84, 213, 146, 0.4);
+            animation: pulseCorner 3s ease-in-out infinite 1s;
+        }
+
+        .corner-accent-bottom-right {
+            bottom: 0;
+            right: 0;
+            border-left: none;
+            border-top: none;
+            border-color: rgba(138, 43, 226, 0.6);
+            box-shadow: 
+                2px 2px 10px rgba(138, 43, 226, 0.8),
+                5px 5px 20px rgba(138, 43, 226, 0.4);
+            animation: pulseCorner 3s ease-in-out infinite 2.5s;
+        }
+
+        @keyframes pulseCorner {
+            0%, 100% {
+                opacity: 0.6;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+        }
+
+        /* Glowing orb effects */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            animation: orbFloat 20s ease-in-out infinite;
+        }
+
+        .orb-purple {
+            width: 300px;
+            height: 300px;
+            background: rgba(138, 43, 226, 0.4);
+            top: 20%;
+            left: 15%;
+        }
+
+        .orb-green {
+            width: 250px;
+            height: 250px;
+            background: rgba(84, 213, 146, 0.3);
+            bottom: 25%;
+            right: 20%;
+            animation-delay: -10s;
+        }
+
+        @keyframes orbFloat {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            25% {
+                transform: translate(50px, -50px) scale(1.1);
+            }
+            50% {
+                transform: translate(-30px, 30px) scale(0.9);
+            }
+            75% {
+                transform: translate(40px, 20px) scale(1.05);
+            }
+        }
+
+        /* Entry page styles */
+        .entry-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            background: #0a0a0f;
+        }
+
+        .entry-title {
+            font-size: 4rem;
+            font-weight: bold;
+            color: rgba(138, 43, 226, 0.9);
+            text-shadow: 
+                0 0 20px rgba(138, 43, 226, 0.8),
+                0 0 40px rgba(138, 43, 226, 0.6),
+                0 0 60px rgba(138, 43, 226, 0.4);
+            margin-bottom: 3rem;
+            letter-spacing: 0.15em;
+            text-transform: lowercase;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            animation: titlePulse 2s ease-in-out infinite;
+            padding: 0 1rem;
+            text-align: center;
+            word-break: break-word;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        @keyframes titlePulse {
+            0%, 100% {
+                opacity: 0.8;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+        }
+
+        .enter-button {
+            padding: 1.5rem 4rem;
+            font-size: 1.5rem;
+            font-family: 'Courier New', monospace;
+            background: transparent;
+            border: 2px solid rgba(84, 213, 146, 0.8);
+            color: rgba(84, 213, 146, 0.9);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 0 20px rgba(84, 213, 146, 0.5),
+                inset 0 0 20px rgba(84, 213, 146, 0.1);
+        }
+
+        .enter-button:hover {
+            border-color: rgba(138, 43, 226, 0.9);
+            color: rgba(138, 43, 226, 0.9);
+            box-shadow: 
+                0 0 30px rgba(138, 43, 226, 0.7),
+                inset 0 0 30px rgba(138, 43, 226, 0.2);
+            transform: scale(1.1);
+        }
+
+        .enter-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .enter-button:hover::before {
+            left: 100%;
+        }
+
+        /* Loading popup/modal */
+        .loading-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .loading-popup.active {
+            display: flex;
+        }
+
+        .login-terminal {
+            width: 90%;
+            max-width: 700px;
+            background: rgba(10, 10, 15, 0.9);
+            border: 2px solid rgba(138, 43, 226, 0.6);
+            box-shadow: 
+                0 0 40px rgba(138, 43, 226, 0.6),
+                inset 0 0 40px rgba(138, 43, 226, 0.1);
+            padding: 2rem;
+            position: relative;
+            font-family: 'Courier New', monospace;
+            color: rgba(84, 213, 146, 0.9);
+        }
+
+        .login-terminal::before,
+        .login-terminal::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(138, 43, 226, 0.8);
+        }
+
+        .login-terminal::before {
+            top: -2px;
+            left: -2px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .login-terminal::after {
+            bottom: -2px;
+            right: -2px;
+            border-left: none;
+            border-top: none;
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(138, 43, 226, 0.8);
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.8);
+            animation: blink 1.5s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .terminal-title {
+            font-size: 1.2rem;
+            color: rgba(138, 43, 226, 0.9);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+
+        .terminal-content {
+            font-size: 0.9rem;
+            line-height: 1.8;
+            min-height: 200px;
+        }
+
+        .terminal-line {
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            animation: typeIn 0.5s ease forwards;
+        }
+
+        @keyframes typeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .terminal-prompt {
+            color: rgba(138, 43, 226, 0.8);
+        }
+
+        .terminal-text {
+            color: rgba(84, 213, 146, 0.9);
+            text-shadow: 0 0 5px rgba(84, 213, 146, 0.5);
+        }
+
+        .terminal-cursor {
+            display: inline-block;
+            width: 8px;
+            height: 16px;
+            background: rgba(84, 213, 146, 0.9);
+            margin-left: 4px;
+            animation: cursorBlink 1s step-end infinite;
+            box-shadow: 0 0 5px rgba(84, 213, 146, 0.8);
+        }
+
+        @keyframes cursorBlink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .progress-container {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .progress-label {
+            color: rgba(138, 43, 226, 0.8);
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(138, 43, 226, 0.2);
+            border: 1px solid rgba(138, 43, 226, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, 
+                rgba(138, 43, 226, 0.8) 0%,
+                rgba(84, 213, 146, 0.8) 50%,
+                rgba(138, 43, 226, 0.8) 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(84, 213, 146, 0.6);
+            animation: progressGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes progressGlow {
+            0%, 100% {
+                box-shadow: 0 0 10px rgba(84, 213, 146, 0.6);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(84, 213, 146, 0.9);
+            }
+        }
+
+        .progress-percent {
+            position: absolute;
+            right: 0;
+            top: -20px;
+            color: rgba(84, 213, 146, 0.8);
+            font-size: 0.8rem;
+        }
+
+        /* Main content (hidden initially) */
+        .main-content {
+            display: none;
+        }
+
+        .main-content.active {
+            display: block;
+        }
+
+        /* Wallet Balance Display */
+        .wallet-balance-card {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(10, 10, 15, 0.95);
+            border: 2px solid rgba(138, 43, 226, 0.6);
+            box-shadow: 
+                0 0 40px rgba(138, 43, 226, 0.6),
+                inset 0 0 40px rgba(138, 43, 226, 0.1);
+            padding: 3rem;
+            min-width: 400px;
+            max-width: 500px;
+            z-index: 100;
+            opacity: 0;
+            animation: fadeInScale 0.8s ease forwards;
+            font-family: 'Courier New', monospace;
+            box-sizing: border-box;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .wallet-balance-card::before,
+        .wallet-balance-card::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(138, 43, 226, 0.8);
+        }
+
+        .wallet-balance-card::before {
+            top: -2px;
+            left: -2px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .wallet-balance-card::after {
+            bottom: -2px;
+            right: -2px;
+            border-left: none;
+            border-top: none;
+        }
+
+        .wallet-label {
+            color: rgba(138, 43, 226, 0.8);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .wallet-label::before {
+            content: '●';
+            color: rgba(84, 213, 146, 0.8);
+            animation: blink 1.5s ease-in-out infinite;
+        }
+
+        .wallet-address {
+            color: rgba(84, 213, 146, 0.7);
+            font-size: 0.75rem;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 2rem;
+            word-break: break-all;
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards 0.3s;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .balance-section {
+            margin-top: 1.5rem;
+        }
+
+        .balance-label {
+            color: rgba(138, 43, 226, 0.7);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .balance-amount {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: rgba(84, 213, 146, 0.9);
+            text-shadow: 
+                0 0 10px rgba(84, 213, 146, 0.6),
+                0 0 20px rgba(84, 213, 146, 0.4);
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.05em;
+        }
+
+        .balance-symbol {
+            font-size: 1.5rem;
+            color: rgba(138, 43, 226, 0.8);
+            margin-left: 0.5rem;
+        }
+
+        .initializing-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 15, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .initializing-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .init-text {
+            color: rgba(138, 43, 226, 0.9);
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .init-dots {
+            display: inline-flex;
+            gap: 0.3rem;
+        }
+
+        .init-dot {
+            width: 8px;
+            height: 8px;
+            background: rgba(84, 213, 146, 0.8);
+            border-radius: 50%;
+            animation: dotPulse 1.4s ease-in-out infinite;
+            box-shadow: 0 0 10px rgba(84, 213, 146, 0.6);
+        }
+
+        .init-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .init-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes dotPulse {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(0.8);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        .balance-row {
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+        }
+
+        /* Begin Message Animation */
+        .begin-message {
+            position: absolute;
+            top: calc(50% + 180px);
+            left: 50%;
+            transform: translate(-50%, 0);
+            background: rgba(10, 10, 15, 0.95);
+            border: 2px solid rgba(84, 213, 146, 0.6);
+            box-shadow: 
+                0 0 40px rgba(84, 213, 146, 0.6),
+                inset 0 0 40px rgba(84, 213, 146, 0.1);
+            padding: 2rem 3rem;
+            min-width: 400px;
+            max-width: 500px;
+            z-index: 100;
+            opacity: 0;
+            transform: translate(-50%, -20px) scale(0.95);
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .begin-message.active {
+            animation: revealFromBox 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes revealFromBox {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -20px) scale(0.95);
+                max-height: 0;
+                padding-top: 0;
+                padding-bottom: 0;
+            }
+            50% {
+                opacity: 0.8;
+                transform: translate(-50%, 10px) scale(1.02);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, 0) scale(1);
+                max-height: 200px;
+                padding-top: 2rem;
+                padding-bottom: 2rem;
+            }
+        }
+
+        .begin-message::before,
+        .begin-message::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            border: 2px solid rgba(84, 213, 146, 0.8);
+        }
+
+        .begin-message::before {
+            top: -2px;
+            left: -2px;
+            border-right: none;
+            border-bottom: none;
+            animation: cornerGlow 2s ease-in-out infinite;
+        }
+
+        .begin-message::after {
+            bottom: -2px;
+            right: -2px;
+            border-left: none;
+            border-top: none;
+            animation: cornerGlow 2s ease-in-out infinite 1s;
+        }
+
+        @keyframes cornerGlow {
+            0%, 100% {
+                box-shadow: 0 0 10px rgba(84, 213, 146, 0.6);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(84, 213, 146, 0.9);
+            }
+        }
+
+        .begin-text {
+            color: rgba(84, 213, 146, 0.9);
+            font-size: 1.3rem;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            text-shadow: 
+                0 0 10px rgba(84, 213, 146, 0.6),
+                0 0 20px rgba(84, 213, 146, 0.4);
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: textFadeIn 0.8s ease forwards 0.5s;
+        }
+
+        @keyframes textFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .begin-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            opacity: 0;
+            animation: textFadeIn 0.8s ease forwards 0.8s;
+        }
+
+        /* Close animations */
+        .wallet-balance-card.closing {
+            animation: closeCard 0.6s ease forwards;
+        }
+
+        .begin-message.closing {
+            animation: closeMessage 0.6s ease forwards;
+        }
+
+        @keyframes closeCard {
+            to {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+        }
+
+        @keyframes closeMessage {
+            to {
+                opacity: 0;
+                transform: translate(-50%, 0) scale(0.8);
+            }
+        }
+
+        /* Rules Box */
+        .rules-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: rgba(10, 10, 15, 0.95);
+            border: 2px solid rgba(138, 43, 226, 0.6);
+            box-shadow: 
+                0 0 50px rgba(138, 43, 226, 0.7),
+                inset 0 0 50px rgba(138, 43, 226, 0.15);
+            padding: 2rem;
+            min-width: 500px;
+            max-width: 700px;
+            max-height: 85vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            z-index: 200;
+            opacity: 0;
+            font-family: 'Courier New', monospace;
+            box-sizing: border-box;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Custom scrollbar for rules box */
+        .rules-box::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .rules-box::-webkit-scrollbar-track {
+            background: rgba(138, 43, 226, 0.1);
+        }
+
+        .rules-box::-webkit-scrollbar-thumb {
+            background: rgba(138, 43, 226, 0.6);
+            border-radius: 4px;
+        }
+
+        .rules-box::-webkit-scrollbar-thumb:hover {
+            background: rgba(138, 43, 226, 0.8);
+        }
+
+        .rules-box.active {
+            animation: rulesReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes rulesReveal {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0) rotate(-5deg);
+            }
+            60% {
+                transform: translate(-50%, -50%) scale(1.05) rotate(2deg);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1) rotate(0deg);
+            }
+        }
+
+        .rules-box::before,
+        .rules-box::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(138, 43, 226, 0.8);
+        }
+
+        .rules-box::before {
+            top: -2px;
+            left: -2px;
+            border-right: none;
+            border-bottom: none;
+            animation: cornerGlow 2s ease-in-out infinite;
+        }
+
+        .rules-box::after {
+            bottom: -2px;
+            right: -2px;
+            border-left: none;
+            border-top: none;
+            animation: cornerGlow 2s ease-in-out infinite 1s;
+        }
+
+        .rules-title {
+            color: rgba(138, 43, 226, 0.9);
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 2rem;
+            text-align: center;
+            text-shadow: 
+                0 0 15px rgba(138, 43, 226, 0.6),
+                0 0 30px rgba(138, 43, 226, 0.4);
+        }
+
+        .rules-content {
+            color: rgba(84, 213, 146, 0.9);
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .rules-content a {
+            color: rgba(84, 213, 146, 0.9);
+            text-decoration: underline;
+            transition: all 0.3s ease;
+        }
+
+        .rules-content a:hover {
+            color: rgba(84, 213, 146, 1);
+            text-shadow: 0 0 10px rgba(84, 213, 146, 0.6);
+        }
+
+        .rules-content strong {
+            color: rgba(138, 43, 226, 0.9);
+        }
+
+        /* Accordion Styles */
+        .rules-accordion {
+            margin-bottom: 1rem;
+        }
+
+        .accordion-header {
+            background: rgba(138, 43, 226, 0.1);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            margin-bottom: 0.5rem;
+        }
+
+        .accordion-header:hover {
+            background: rgba(138, 43, 226, 0.2);
+            border-color: rgba(138, 43, 226, 0.5);
+        }
+
+        .accordion-header.active {
+            background: rgba(138, 43, 226, 0.2);
+            border-color: rgba(138, 43, 226, 0.6);
+        }
+
+        .accordion-title {
+            color: rgba(138, 43, 226, 0.9);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: bold;
+        }
+
+        .accordion-icon {
+            color: rgba(84, 213, 146, 0.9);
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-header.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            padding: 0 1.5rem;
+        }
+
+        .accordion-content.active {
+            max-height: 500px;
+            padding: 1rem 1.5rem;
+        }
+
+        .accordion-body {
+            color: rgba(84, 213, 146, 0.9);
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .rules-section {
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .rules-section:nth-child(1) { animation-delay: 0.2s; }
+        .rules-section:nth-child(2) { animation-delay: 0.4s; }
+        .rules-section:nth-child(3) { animation-delay: 0.6s; }
+        .rules-section:nth-child(4) { animation-delay: 0.8s; }
+        .rules-section:nth-child(5) { animation-delay: 1s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .rules-section-title {
+            color: rgba(138, 43, 226, 0.8);
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .rules-section-title::before {
+            content: '▶';
+            color: rgba(84, 213, 146, 0.8);
+            font-size: 0.8rem;
+        }
+
+        .rules-list {
+            list-style: none;
+            padding-left: 1.5rem;
+        }
+
+        .rules-list li {
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .rules-list li::before {
+            content: '•';
+            position: absolute;
+            left: -1.5rem;
+            color: rgba(84, 213, 146, 0.8);
+            font-size: 1.2rem;
+        }
+
+        .begin-button {
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+            font-family: 'Courier New', monospace;
+            background: transparent;
+            border: 2px solid;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            transition: all 0.3s ease;
+        }
+
+        .begin-button-yes {
+            border-color: rgba(84, 213, 146, 0.8);
+            color: rgba(84, 213, 146, 0.9);
+            box-shadow: 
+                0 0 15px rgba(84, 213, 146, 0.5),
+                inset 0 0 15px rgba(84, 213, 146, 0.1);
+        }
+
+        .begin-button-yes:hover {
+            border-color: rgba(84, 213, 146, 1);
+            color: rgba(84, 213, 146, 1);
+            box-shadow: 
+                0 0 25px rgba(84, 213, 146, 0.8),
+                inset 0 0 25px rgba(84, 213, 146, 0.2);
+            transform: scale(1.05);
+        }
+
+        .begin-button-no {
+            border-color: rgba(138, 43, 226, 0.6);
+            color: rgba(138, 43, 226, 0.8);
+            box-shadow: 
+                0 0 15px rgba(138, 43, 226, 0.4),
+                inset 0 0 15px rgba(138, 43, 226, 0.1);
+        }
+
+        .begin-button-no:hover {
+            border-color: rgba(138, 43, 226, 0.9);
+            color: rgba(138, 43, 226, 1);
+            box-shadow: 
+                0 0 25px rgba(138, 43, 226, 0.7),
+                inset 0 0 25px rgba(138, 43, 226, 0.2);
+            transform: scale(1.05);
+        }
+
+        .begin-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .begin-button:hover::before {
+            left: 100%;
+        }
+
+        /* Timer Display */
+        .timer-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: rgba(138, 43, 226, 0.1);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            border-radius: 4px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .timer-section:nth-child(5) { animation-delay: 1s; }
+
+        .timer-label {
+            color: rgba(138, 43, 226, 0.8);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .timer-display {
+            font-size: 2rem;
+            font-weight: bold;
+            color: rgba(84, 213, 146, 0.9);
+            text-shadow: 
+                0 0 10px rgba(84, 213, 146, 0.6),
+                0 0 20px rgba(84, 213, 146, 0.4);
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.1em;
+        }
+
+        .timer-unit {
+            font-size: 1rem;
+            color: rgba(138, 43, 226, 0.7);
+            margin-left: 0.5rem;
+        }
+
+        /* Acknowledge Button */
+        .acknowledge-button {
+            padding: 1rem 3rem;
+            font-size: 1.1rem;
+            font-family: 'Courier New', monospace;
+            background: transparent;
+            border: 2px solid rgba(84, 213, 146, 0.8);
+            color: rgba(84, 213, 146, 0.9);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 0 20px rgba(84, 213, 146, 0.5),
+                inset 0 0 20px rgba(84, 213, 146, 0.1);
+            margin: 2rem auto 0;
+            display: block;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards 1.2s;
+        }
+
+        .acknowledge-button:hover {
+            border-color: rgba(84, 213, 146, 1);
+            color: rgba(84, 213, 146, 1);
+            box-shadow: 
+                0 0 30px rgba(84, 213, 146, 0.8),
+                inset 0 0 30px rgba(84, 213, 146, 0.2);
+            transform: scale(1.05);
+        }
+
+        .acknowledge-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .acknowledge-button:hover::before {
+            left: 100%;
+        }
+
+        /* Community Links Box */
+        .community-links-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: rgba(10, 10, 15, 0.95);
+            border: 2px solid rgba(84, 213, 146, 0.6);
+            box-shadow: 
+                0 0 50px rgba(84, 213, 146, 0.7),
+                inset 0 0 50px rgba(84, 213, 146, 0.15);
+            padding: 3rem;
+            min-width: 500px;
+            max-width: 600px;
+            z-index: 200;
+            opacity: 0;
+            font-family: 'Courier New', monospace;
+            box-sizing: border-box;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .community-links-box.active {
+            animation: linksReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes linksReveal {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0) rotate(-5deg);
+            }
+            60% {
+                transform: translate(-50%, -50%) scale(1.05) rotate(2deg);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1) rotate(0deg);
+            }
+        }
+
+        .community-links-box::before,
+        .community-links-box::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(84, 213, 146, 0.8);
+        }
+
+        .community-links-box::before {
+            top: -2px;
+            left: -2px;
+            border-right: none;
+            border-bottom: none;
+            animation: cornerGlow 2s ease-in-out infinite;
+        }
+
+        .community-links-box::after {
+            bottom: -2px;
+            right: -2px;
+            border-left: none;
+            border-top: none;
+            animation: cornerGlow 2s ease-in-out infinite 1s;
+        }
+
+        .community-title {
+            color: rgba(84, 213, 146, 0.9);
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 2rem;
+            text-align: center;
+            text-shadow: 
+                0 0 15px rgba(84, 213, 146, 0.6),
+                0 0 30px rgba(84, 213, 146, 0.4);
+        }
+
+        .community-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .community-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.2rem 2rem;
+            border: 2px solid rgba(138, 43, 226, 0.6);
+            background: rgba(138, 43, 226, 0.1);
+            color: rgba(138, 43, 226, 0.9);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+            cursor: pointer;
+            z-index: 10;
+            pointer-events: auto;
+        }
+
+        .community-link:nth-child(1) { 
+            animation-delay: 0.3s; 
+        }
+        .community-link:nth-child(2) { 
+            animation-delay: 0.5s; 
+        }
+
+        /* Spotlight X link */
+        .community-link.spotlight {
+            padding: 1.5rem 2.5rem;
+            font-size: 1.2rem;
+            border: 2px solid rgba(84, 213, 146, 0.8);
+            background: rgba(84, 213, 146, 0.15);
+            color: rgba(84, 213, 146, 0.9);
+            box-shadow: 
+                0 0 30px rgba(84, 213, 146, 0.6),
+                inset 0 0 30px rgba(84, 213, 146, 0.1);
+            animation: spotlightPulse 2s ease-in-out infinite, fadeInUp 0.6s ease forwards;
+            animation-delay: 0s, 0.3s;
+        }
+
+        @keyframes spotlightPulse {
+            0%, 100% {
+                box-shadow: 
+                    0 0 30px rgba(84, 213, 146, 0.6),
+                    inset 0 0 30px rgba(84, 213, 146, 0.1);
+            }
+            50% {
+                box-shadow: 
+                    0 0 50px rgba(84, 213, 146, 0.9),
+                    inset 0 0 50px rgba(84, 213, 146, 0.2);
+            }
+        }
+
+        .community-link.spotlight:hover {
+            border-color: rgba(84, 213, 146, 1);
+            background: rgba(84, 213, 146, 0.25);
+            color: rgba(84, 213, 146, 1);
+            box-shadow: 
+                0 0 40px rgba(84, 213, 146, 0.9),
+                inset 0 0 40px rgba(84, 213, 146, 0.3);
+            transform: scale(1.08);
+        }
+
+        .community-link:hover {
+            border-color: rgba(138, 43, 226, 1);
+            background: rgba(138, 43, 226, 0.2);
+            color: rgba(138, 43, 226, 1);
+            box-shadow: 
+                0 0 25px rgba(138, 43, 226, 0.7),
+                inset 0 0 25px rgba(138, 43, 226, 0.2);
+            transform: scale(1.05);
+        }
+
+        .community-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .community-link:hover::before {
+            left: 100%;
+        }
+
+        /* Dashboard Button */
+        .dashboard-button {
+            padding: 1.2rem 3rem;
+            font-size: 1.2rem;
+            font-family: 'Courier New', monospace;
+            background: transparent;
+            border: 2px solid rgba(84, 213, 146, 0.8);
+            color: rgba(84, 213, 146, 0.9);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 0 25px rgba(84, 213, 146, 0.5),
+                inset 0 0 25px rgba(84, 213, 146, 0.1);
+            margin: 2rem auto 0;
+            display: block;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards 0.8s;
+        }
+
+        .dashboard-button:hover {
+            border-color: rgba(84, 213, 146, 1);
+            color: rgba(84, 213, 146, 1);
+            box-shadow: 
+                0 0 35px rgba(84, 213, 146, 0.8),
+                inset 0 0 35px rgba(84, 213, 146, 0.2);
+            transform: scale(1.05);
+        }
+
+        .dashboard-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .dashboard-button:hover::before {
+            left: 100%;
+        }
+
+        .rules-box.closing {
+            animation: closeRules 0.6s ease forwards;
+        }
+
+        /* $PUMP Price Marquee */
+        .pump-price-marquee {
+            background: rgba(138, 43, 226, 0.2);
+            border-top: 2px solid rgba(138, 43, 226, 0.6);
+            border-bottom: 2px solid rgba(138, 43, 226, 0.6);
+            padding: 1rem 0;
+            overflow: hidden;
+            white-space: nowrap;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .pump-price-content {
+            display: inline-block;
+            animation: marquee 20s linear infinite;
+            color: rgba(84, 213, 146, 0.9);
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(84, 213, 146, 0.6);
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.1em;
+            padding-right: 100px;
+        }
+
+        .pump-price-item {
+            display: inline-block;
+            margin-right: 100px;
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        /* Dashboard Styles */
+        .dashboard {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            min-height: 100vh;
+            padding: 3rem 2rem;
+            padding-bottom: 4rem;
+            opacity: 0;
+            display: none;
+            z-index: 300;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-sizing: border-box;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .dashboard.active {
+            display: block;
+            animation: dashboardFadeIn 1s ease forwards;
+        }
+
+        @keyframes dashboardFadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Typewriter Welcome */
+        .welcome-message {
+            text-align: center;
+            margin-bottom: 4rem;
+            min-height: 80px;
+            padding: 0 1rem;
+        }
+
+        .welcome-text {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: rgba(138, 43, 226, 0.9);
+            text-shadow: 
+                0 0 20px rgba(138, 43, 226, 0.8),
+                0 0 40px rgba(138, 43, 226, 0.6),
+                0 0 60px rgba(138, 43, 226, 0.4);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-family: 'Courier New', monospace;
+        }
+
+        .typewriter-cursor {
+            display: inline-block;
+            width: 4px;
+            height: 2.5rem;
+            background: rgba(84, 213, 146, 0.9);
+            margin-left: 8px;
+            animation: cursorBlink 1s step-end infinite;
+            box-shadow: 0 0 10px rgba(84, 213, 146, 0.8);
+            vertical-align: middle;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto 3rem;
+        }
+
+        .dashboard-card {
+            background: rgba(10, 10, 15, 0.95);
+            border: 2px solid rgba(138, 43, 226, 0.6);
+            box-shadow: 
+                0 0 40px rgba(138, 43, 226, 0.6),
+                inset 0 0 40px rgba(138, 43, 226, 0.1);
+            padding: 2.5rem;
+            position: relative;
+            font-family: 'Courier New', monospace;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: cardSlideIn 0.8s ease forwards;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dashboard-card:nth-child(1) { animation-delay: 0.3s; }
+        .dashboard-card:nth-child(2) { animation-delay: 0.5s; }
+        .dashboard-card:nth-child(3) { animation-delay: 0.7s; }
+
+        @keyframes cardSlideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dashboard-card::before,
+        .dashboard-card::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            border: 2px solid rgba(138, 43, 226, 0.8);
+        }
+
+        .dashboard-card::before {
+            top: -2px;
+            left: -2px;
+            border-right: none;
+            border-bottom: none;
+            animation: cornerGlow 2s ease-in-out infinite;
+        }
+
+        .dashboard-card::after {
+            bottom: -2px;
+            right: -2px;
+            border-left: none;
+            border-top: none;
+            animation: cornerGlow 2s ease-in-out infinite 1s;
+        }
+
+        .card-title {
+            color: rgba(138, 43, 226, 0.9);
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1.5rem;
+            text-shadow: 
+                0 0 10px rgba(138, 43, 226, 0.6),
+                0 0 20px rgba(138, 43, 226, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-title::before {
+            content: '▶';
+            color: rgba(84, 213, 146, 0.8);
+            font-size: 0.9rem;
+        }
+
+        .card-content {
+            color: rgba(84, 213, 146, 0.9);
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .rewards-status {
+            font-size: 1rem;
+            color: rgba(138, 43, 226, 0.8);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .rewards-status span {
+            color: rgba(84, 213, 146, 0.9);
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(84, 213, 146, 0.6);
+            font-family: 'Courier New', monospace;
+        }
+
+        .card-title span {
+            color: rgba(84, 213, 146, 0.9);
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(84, 213, 146, 0.6);
+            font-family: 'Courier New', monospace;
+        }
+
+        .wallet-balance-display {
+            font-size: 2rem;
+            font-weight: bold;
+            color: rgba(84, 213, 146, 0.9);
+            text-shadow: 
+                0 0 15px rgba(84, 213, 146, 0.6),
+                0 0 30px rgba(84, 213, 146, 0.4);
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+        }
+
+        .balance-symbol-dash {
+            font-size: 1.5rem;
+            color: rgba(138, 43, 226, 0.8);
+        }
+
+        .dashboard-timer {
+            font-size: 2rem;
+            font-weight: bold;
+            color: rgba(84, 213, 146, 0.9);
+            text-shadow: 
+                0 0 15px rgba(84, 213, 146, 0.6),
+                0 0 30px rgba(84, 213, 146, 0.4);
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.1em;
+            text-align: center;
+        }
+
+        .games-empty {
+            text-align: center;
+            padding: 2rem;
+            color: rgba(138, 43, 226, 0.7);
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+
+        .games-empty::before {
+            content: '◊';
+            display: block;
+            font-size: 3rem;
+            color: rgba(138, 43, 226, 0.4);
+            margin-bottom: 1rem;
+        }
+
+        /* Contract Address Section */
+        .contract-section {
+            max-width: 1400px;
+            margin: 3rem auto;
+            background: rgba(10, 10, 15, 0.95);
+            border: 2px solid rgba(138, 43, 226, 0.6);
+            box-shadow: 
+                0 0 40px rgba(138, 43, 226, 0.6),
+                inset 0 0 40px rgba(138, 43, 226, 0.1);
+            padding: 2.5rem;
+            position: relative;
+            font-family: 'Courier New', monospace;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: cardSlideIn 0.8s ease forwards;
+            animation-delay: 0.9s;
+        }
+
+        .contract-section::before,
+        .contract-section::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            border: 2px solid rgba(138, 43, 226, 0.8);
+        }
+
+        .contract-section::before {
+            top: -2px;
+            left: -2px;
+            border-right: none;
+            border-bottom: none;
+            animation: cornerGlow 2s ease-in-out infinite;
+        }
+
+        .contract-section::after {
+            bottom: -2px;
+            right: -2px;
+            border-left: none;
+            border-top: none;
+            animation: cornerGlow 2s ease-in-out infinite 1s;
+        }
+
+        .contract-label {
+            color: rgba(138, 43, 226, 0.9);
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .contract-label::before {
+            content: '▶';
+            color: rgba(84, 213, 146, 0.8);
+            font-size: 0.9rem;
+        }
+
+        .contract-address-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            background: rgba(138, 43, 226, 0.1);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            padding: 1.5rem 2rem;
+            border-radius: 4px;
+            flex-wrap: wrap;
+        }
+
+        .contract-address {
+            flex: 1;
+            color: rgba(84, 213, 146, 0.9);
+            font-size: 0.95rem;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+            text-shadow: 0 0 5px rgba(84, 213, 146, 0.5);
+            line-height: 1.6;
+            overflow-wrap: break-word;
+            hyphens: auto;
+        }
+
+
+        .copy-button {
+            padding: 0.6rem 1.2rem;
+            background: transparent;
+            border: 2px solid rgba(84, 213, 146, 0.6);
+            color: rgba(84, 213, 146, 0.9);
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .copy-button:hover {
+            border-color: rgba(84, 213, 146, 1);
+            background: rgba(84, 213, 146, 0.1);
+            box-shadow: 0 0 15px rgba(84, 213, 146, 0.5);
+            transform: scale(1.05);
+        }
+
+        .copy-button.copied {
+            border-color: rgba(84, 213, 146, 1);
+            background: rgba(84, 213, 146, 0.2);
+            color: rgba(84, 213, 146, 1);
+        }
+
+        .copy-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .copy-button:hover::before {
+            left: 100%;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 3rem auto 2rem;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: cardSlideIn 0.8s ease forwards;
+            animation-delay: 1.1s;
+        }
+
+        .action-button {
+            flex: 1;
+            max-width: 300px;
+            padding: 1.2rem 2rem;
+            background: transparent;
+            border: 2px solid;
+            color: rgba(84, 213, 146, 0.9);
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .action-button-dex {
+            border-color: rgba(138, 43, 226, 0.6);
+            color: rgba(138, 43, 226, 0.9);
+            box-shadow: 
+                0 0 20px rgba(138, 43, 226, 0.4),
+                inset 0 0 20px rgba(138, 43, 226, 0.1);
+        }
+
+        .action-button-dex:hover {
+            border-color: rgba(138, 43, 226, 1);
+            background: rgba(138, 43, 226, 0.1);
+            box-shadow: 
+                0 0 30px rgba(138, 43, 226, 0.7),
+                inset 0 0 30px rgba(138, 43, 226, 0.2);
+            transform: scale(1.05);
+        }
+
+        .action-button-swap {
+            border-color: rgba(84, 213, 146, 0.6);
+            color: rgba(84, 213, 146, 0.9);
+            box-shadow: 
+                0 0 20px rgba(84, 213, 146, 0.4),
+                inset 0 0 20px rgba(84, 213, 146, 0.1);
+        }
+
+        .action-button-swap:hover {
+            border-color: rgba(84, 213, 146, 1);
+            background: rgba(84, 213, 146, 0.1);
+            box-shadow: 
+                0 0 30px rgba(84, 213, 146, 0.7),
+                inset 0 0 30px rgba(84, 213, 146, 0.2);
+            transform: scale(1.05);
+        }
+
+        .action-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .action-button:hover::before {
+            left: 100%;
+        }
+
+        @keyframes closeRules {
+            to {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+        }
+
+        /* Dashboard Mobile Responsive */
+        @media screen and (max-width: 1024px) {
+            .dashboard {
+                padding: 2rem 1.5rem;
+            }
+
+            .dashboard-grid {
+                gap: 2rem;
+            }
+
+            .dashboard-card {
+                padding: 2rem;
+            }
+        }
+
+        /* Mobile Responsive - Loading, Wallet, Rules, Community */
+        @media screen and (max-width: 768px) {
+            .login-terminal {
+                width: 95%;
+                padding: 1.5rem;
+                max-height: 90vh;
+                overflow-y: auto;
+                margin: 1rem;
+            }
+
+            .terminal-title {
+                font-size: 0.9rem;
+            }
+
+            .terminal-content {
+                font-size: 0.85rem;
+                line-height: 1.6;
+            }
+
+            .wallet-balance-card {
+                min-width: 90%;
+                max-width: 95%;
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                position: fixed;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+
+            .balance-amount {
+                font-size: 2rem;
+            }
+
+            .begin-message {
+                min-width: 90%;
+                max-width: 95%;
+                padding: 2rem 1.5rem;
+                top: auto;
+                bottom: 2rem;
+                left: 50%;
+                transform: translateX(-50%);
+                position: fixed;
+            }
+
+            .begin-text {
+                font-size: 1.1rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .rules-box {
+                min-width: 95%;
+                max-width: 95%;
+                padding: 2rem 1.5rem;
+                max-height: 90vh;
+                margin: 1rem;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                overflow-y: auto;
+                overflow-x: hidden;
+                -webkit-overflow-scrolling: touch;
+                position: fixed;
+            }
+
+            .rules-title {
+                font-size: 1.4rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .rules-content {
+                font-size: 0.9rem;
+            }
+
+            .accordion-header {
+                padding: 0.9rem 1.2rem;
+            }
+
+            .accordion-title {
+                font-size: 0.95rem;
+            }
+
+            .timer-section {
+                margin: 1.5rem 0;
+                padding: 1.2rem;
+            }
+
+            .timer-display {
+                font-size: 1.5rem;
+            }
+
+            .acknowledge-button {
+                padding: 1.2rem 2.5rem;
+                font-size: 1rem;
+                width: 100%;
+                margin-top: 1.5rem;
+            }
+
+            .community-links-box {
+                min-width: 95%;
+                max-width: 95%;
+                padding: 2.5rem 1.5rem;
+                margin: 1rem;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                max-height: 90vh;
+                overflow-y: auto;
+                overflow-x: hidden;
+                -webkit-overflow-scrolling: touch;
+                position: fixed;
+            }
+
+            .community-links {
+                gap: 1.2rem;
+            }
+
+            .dashboard-button {
+                position: relative;
+                z-index: 10;
+                margin-top: 2rem;
+            }
+
+            .community-title {
+                font-size: 1.4rem;
+                margin-bottom: 2rem;
+            }
+
+            .community-link {
+                padding: 1.2rem 1.5rem;
+                font-size: 0.95rem;
+            }
+
+            .community-link.spotlight {
+                padding: 1.4rem 2rem;
+                font-size: 1.1rem;
+            }
+
+            .dashboard-button {
+                padding: 1.2rem 2.5rem;
+                font-size: 1.1rem;
+                width: 100%;
+                margin-top: 2rem;
+            }
+        }
+
+        /* Entry Page Mobile Responsive */
+        @media screen and (max-width: 768px) {
+            .entry-title {
+                font-size: 2.2rem;
+                margin-bottom: 3rem;
+                padding: 0 2rem;
+                letter-spacing: 0.1em;
+                line-height: 1.2;
+            }
+
+            .enter-button {
+                padding: 1.5rem 3.5rem;
+                font-size: 1.3rem;
+                min-width: 200px;
+            }
+
+            .entry-page {
+                padding: 2rem 1rem;
+                justify-content: center;
+                min-height: 100vh;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .login-terminal {
+                width: 98%;
+                padding: 1.2rem;
+                margin: 0.5rem;
+            }
+
+            .terminal-title {
+                font-size: 0.8rem;
+            }
+
+            .wallet-balance-card {
+                min-width: 95%;
+                max-width: 98%;
+                padding: 1.5rem 1.2rem;
+                position: fixed;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+
+            .balance-amount {
+                font-size: 1.5rem;
+            }
+
+            .begin-message {
+                min-width: 95%;
+                max-width: 98%;
+                padding: 1.5rem 1.2rem;
+                bottom: 3%;
+            }
+
+            .begin-text {
+                font-size: 1rem;
+            }
+
+            .rules-box {
+                min-width: 98%;
+                max-width: 98%;
+                padding: 1.5rem 1.2rem;
+                margin: 0.5rem;
+                position: fixed;
+                max-height: 90vh;
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+
+            .rules-title {
+                font-size: 1.2rem;
+            }
+
+            .accordion-header {
+                padding: 0.8rem 1rem;
+            }
+
+            .accordion-title {
+                font-size: 0.85rem;
+            }
+
+            .timer-display {
+                font-size: 1.2rem;
+            }
+
+            .acknowledge-button {
+                padding: 1rem 2rem;
+                font-size: 0.95rem;
+            }
+
+            .community-links-box {
+                min-width: 98%;
+                max-width: 98%;
+                padding: 2rem 1.2rem;
+                margin: 0.5rem;
+                position: fixed;
+                max-height: 90vh;
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+
+            .community-links {
+                gap: 1rem;
+            }
+
+            .community-title {
+                font-size: 1.2rem;
+            }
+
+            .community-link {
+                padding: 1rem 1.2rem;
+                font-size: 0.9rem;
+            }
+
+            .community-link.spotlight {
+                padding: 1.2rem 1.5rem;
+                font-size: 1rem;
+            }
+
+            .dashboard-button {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
+
+            .entry-title {
+                font-size: 1.6rem;
+                margin-bottom: 3rem;
+                padding: 0 1.5rem;
+                letter-spacing: 0.08em;
+                line-height: 1.3;
+            }
+
+            .enter-button {
+                padding: 1.3rem 2.8rem;
+                font-size: 1.1rem;
+                min-width: 180px;
+            }
+
+            .entry-page {
+                padding: 2rem 1rem;
+            }
+        }
+
+        @media screen and (max-width: 360px) {
+            .entry-title {
+                font-size: 1.4rem;
+                margin-bottom: 2.5rem;
+                padding: 0 1rem;
+            }
+
+            .enter-button {
+                padding: 1.2rem 2.5rem;
+                font-size: 1rem;
+                min-width: 160px;
+            }
+
+            .login-terminal {
+                width: 98%;
+                padding: 1rem;
+            }
+
+            .wallet-balance-card {
+                min-width: 96%;
+                padding: 1.5rem 1rem;
+            }
+
+            .begin-message {
+                min-width: 96%;
+                padding: 1.5rem 1rem;
+            }
+
+            .rules-box {
+                min-width: 96%;
+                padding: 1.5rem 1rem;
+            }
+
+            .community-links-box {
+                min-width: 96%;
+                padding: 1.5rem 1rem;
+            }
+
+            .dashboard {
+                padding: 1rem 0.5rem;
+            }
+
+            .dashboard-card {
+                padding: 1.5rem 1rem;
+            }
+
+            .contract-section {
+                padding: 1.5rem 1rem;
+            }
+
+            .action-button {
+                padding: 1.2rem 1.3rem;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .dashboard {
+                padding: 2rem 1rem;
+                min-height: 100vh;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .pump-price-marquee {
+                margin-bottom: 2.5rem;
+                padding: 1rem 0;
+            }
+
+            .pump-price-content {
+                font-size: 1rem;
+            }
+
+            .welcome-message {
+                margin-bottom: 3.5rem;
+                padding: 0 1rem;
+            }
+
+            .welcome-text {
+                font-size: 1.8rem;
+                line-height: 1.3;
+            }
+
+            .typewriter-cursor {
+                height: 1.8rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+                margin-bottom: 3rem;
+            }
+
+            .dashboard-card {
+                padding: 2.5rem 2rem;
+                min-height: auto;
+            }
+
+            .card-title {
+                font-size: 1.2rem;
+                margin-bottom: 2rem;
+            }
+
+            .dashboard-timer {
+                font-size: 1.8rem;
+            }
+
+            .rewards-status {
+                font-size: 1rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .wallet-balance-display {
+                font-size: 1.8rem;
+            }
+
+            .contract-section {
+                padding: 2.5rem 2rem;
+                margin: 3rem auto;
+            }
+
+            .contract-label {
+                font-size: 1.1rem;
+                margin-bottom: 2rem;
+            }
+
+            .contract-address-container {
+                flex-direction: column;
+                gap: 1.5rem;
+                padding: 2rem 1.5rem;
+            }
+
+            .contract-address {
+                font-size: 0.9rem;
+                word-break: break-all;
+                overflow-wrap: break-word;
+                line-height: 1.6;
+            }
+
+            .copy-button {
+                width: 100%;
+                padding: 1.2rem;
+                font-size: 1rem;
+                flex-shrink: 0;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 2rem;
+                margin: 3rem auto 2rem;
+                padding: 0 1rem;
+            }
+
+            .action-button {
+                max-width: 100%;
+                padding: 1.5rem 2rem;
+                font-size: 1.1rem;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .dashboard {
+                padding: 1.5rem 1rem;
+                min-height: 100vh;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .pump-price-marquee {
+                margin-bottom: 2rem;
+                padding: 0.8rem 0;
+            }
+
+            .pump-price-content {
+                font-size: 0.9rem;
+            }
+
+            .welcome-message {
+                margin-bottom: 3rem;
+                padding: 0 0.5rem;
+            }
+
+            .welcome-text {
+                font-size: 1.5rem;
+                line-height: 1.4;
+            }
+
+            .typewriter-cursor {
+                height: 1.5rem;
+            }
+
+            .dashboard-grid {
+                gap: 2rem;
+                margin-bottom: 2.5rem;
+            }
+
+            .dashboard-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .card-title {
+                font-size: 1.1rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .dashboard-timer {
+                font-size: 1.5rem;
+            }
+
+            .rewards-status {
+                font-size: 0.9rem;
+                margin-bottom: 1.2rem;
+            }
+
+            .wallet-balance-display {
+                font-size: 1.5rem;
+            }
+
+            .contract-section {
+                padding: 2rem 1.5rem;
+                margin: 2.5rem auto;
+            }
+
+            .contract-label {
+                font-size: 1rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .contract-address-container {
+                flex-direction: column;
+                gap: 1.5rem;
+                padding: 1.5rem;
+            }
+
+            .contract-address {
+                font-size: 0.8rem;
+                word-break: break-all;
+                overflow-wrap: break-word;
+                line-height: 1.6;
+            }
+
+            .copy-button {
+                width: 100%;
+                padding: 1.1rem;
+                font-size: 0.95rem;
+            }
+
+            .action-buttons {
+                gap: 1.5rem;
+                margin: 2.5rem auto 2rem;
+                padding: 0 0.5rem;
+            }
+
+            .action-button {
+                padding: 1.3rem 1.5rem;
+                font-size: 1rem;
+            }
+
+            .action-button {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Entry Page -->
+    <div class="entry-page" id="entryPage">
+        <h1 class="entry-title">pumpfun.games</h1>
+        <button class="enter-button" id="enterButton">Enter</button>
+    </div>
+
+    <!-- Loading Popup -->
+    <div class="loading-popup" id="loadingPopup">
+        <div class="login-terminal">
+            <div class="terminal-header">
+                <div class="terminal-dot"></div>
+                <div class="terminal-title">pumpfun.games | Solana RPC v1.18</div>
+            </div>
+            <div class="terminal-content" id="terminalContent">
+                <!-- Content will be generated by JavaScript -->
+            </div>
+            <div class="progress-container">
+                <div class="progress-label">Connecting to Solana Network</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                    <div class="progress-percent" id="progressPercent">0%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="background-gradient"></div>
+        <div class="grid-overlay"></div>
+        
+        <!-- Corner accents -->
+        <div class="corner-accent corner-accent-top-left"></div>
+        <div class="corner-accent corner-accent-top-right"></div>
+        <div class="corner-accent corner-accent-bottom-left"></div>
+        <div class="corner-accent corner-accent-bottom-right"></div>
+        
+        <!-- Glowing orbs -->
+        <div class="orb orb-purple"></div>
+        <div class="orb orb-green"></div>
+        
+        <!-- Scan line -->
+        <div class="scan-line"></div>
+
+        <!-- Wallet Balance Card -->
+        <div class="wallet-balance-card" id="walletCard">
+            <div class="initializing-overlay" id="initOverlay">
+                <div class="init-text">
+                    Initializing
+                    <div class="init-dots">
+                        <div class="init-dot"></div>
+                        <div class="init-dot"></div>
+                        <div class="init-dot"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="wallet-label">Creator Wallet</div>
+            <div class="wallet-address" id="walletAddress">Loading address...</div>
+            <div class="balance-section">
+                <div class="balance-label">Balance</div>
+                <div class="balance-row">
+                    <div class="balance-amount" id="balanceAmount">0</div>
+                    <span class="balance-symbol">SOL</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Begin Message -->
+        <div class="begin-message" id="beginMessage">
+            <div class="begin-text">Would you like to begin?</div>
+            <div class="begin-buttons">
+                <button class="begin-button begin-button-yes" id="beginYes">Yes</button>
+            </div>
+        </div>
+
+        <!-- Rules Box -->
+        <div class="rules-box" id="rulesBox">
+            <div class="rules-title">Game Rules</div>
+            <div class="rules-content">
+                <div class="rules-accordion">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <div class="accordion-title">How It Works</div>
+                        <div class="accordion-icon">▼</div>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p>A new game is released every 24 hours. Compete in the games to win Solana. When the timer ends, prizes will be distributed to the winners.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="rules-accordion">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <div class="accordion-title">Competition</div>
+                        <div class="accordion-icon">▼</div>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <ul class="rules-list">
+                                <li>Participate in daily games</li>
+                                <li>Compete against other players</li>
+                                <li>Win Solana prizes based on performance</li>
+                                <li>Prizes distributed when timer ends</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="rules-accordion">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <div class="accordion-title">Prize Distribution</div>
+                        <div class="accordion-icon">▼</div>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <ul class="rules-list">
+                                <li>Prizes are automatically distributed</li>
+                                <li>Winners receive Solana directly to their wallet</li>
+                                <li>Check your balance after distribution</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="rules-accordion">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <div class="accordion-title">Join Our Community</div>
+                        <div class="accordion-icon">▼</div>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p>Follow us on <strong>X (Twitter)</strong> at <a href="https://x.com/ThePumpFunGames" target="_blank" style="color: rgba(84, 213, 146, 0.9); text-decoration: underline;">@ThePumpFunGames</a> for updates, announcements, and community discussions!</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="timer-section" id="timerSection">
+                    <div class="timer-label">Next Game In</div>
+                    <div class="timer-display" id="timerDisplay">
+                        <span id="timerHours">00</span>:<span id="timerMinutes">00</span>:<span id="timerSeconds">00</span>
+                    </div>
+                </div>
+            </div>
+            <button class="acknowledge-button" id="acknowledgeButton">Acknowledge</button>
+        </div>
+
+        <!-- Community Links Box -->
+        <div class="community-links-box" id="communityLinksBox">
+            <div class="community-title">Join The Community</div>
+            <div class="community-links">
+                <a href="https://x.com/ThePumpFunGames" target="_blank" class="community-link spotlight" id="xLink">
+                    X (Twitter) @ThePumpFunGames
+                </a>
+                <a href="https://x.com/i/communities/1998544727960875122" target="_blank" class="community-link" id="communityLink">
+                    Communities
+                </a>
+            </div>
+            <button class="dashboard-button" id="dashboardButton">Go to Dashboard</button>
+        </div>
+
+        <!-- Dashboard -->
+        <div class="dashboard" id="dashboard">
+            <!-- Background Music -->
+            <audio id="dashboardMusic" loop>
+                <source src="Untitled.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <div class="pump-price-marquee">
+                <div class="pump-price-content" id="pumpPrice">
+                    <span class="pump-price-item">$PUMP Price: $0.00085</span>
+                    <span class="pump-price-item">$PUMP Price: $0.00085</span>
+                    <span class="pump-price-item">$PUMP Price: $0.00085</span>
+                    <span class="pump-price-item">$PUMP Price: $0.00085</span>
+                    <span class="pump-price-item">$PUMP Price: $0.00085</span>
+                </div>
+            </div>
+            <div class="welcome-message">
+                <div class="welcome-text" id="welcomeText"></div>
+            </div>
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="card-title">Creator Wallet (<span id="walletTitleBalance">0.000</span> SOL)</div>
+                    <div class="card-content">
+                        <div class="rewards-status">Rewards Distributed. (<span id="rewardsAmount">0.000</span> SOL)</div>
+                    </div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="card-title">Timer Until New Game</div>
+                    <div class="card-content">
+                        <div class="dashboard-timer" id="dashboardTimer">
+                            <span id="dashHours">00</span>:<span id="dashMinutes">00</span>:<span id="dashSeconds">00</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="card-title">Available Games</div>
+                    <div class="card-content">
+                        <div class="games-empty">None so far</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contract Address Section -->
+            <div class="contract-section">
+                <div class="contract-label">Contract Address</div>
+                <div class="contract-address-container">
+                    <div class="contract-address" id="contractAddress">
+                        7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJospump
+                    </div>
+                    <button class="copy-button" id="copyButton" onclick="copyContractAddress()">Copy</button>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <a href="https://dexscreener.com/solana" target="_blank" class="action-button action-button-dex">
+                    Dex
+                </a>
+                <a href="https://pump.fun" target="_blank" class="action-button action-button-swap">
+                    Swap
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const enterButton = document.getElementById('enterButton');
+        const entryPage = document.getElementById('entryPage');
+        const loadingPopup = document.getElementById('loadingPopup');
+        const mainContent = document.getElementById('mainContent');
+        const terminalContent = document.getElementById('terminalContent');
+        const progressFill = document.getElementById('progressFill');
+        const progressPercent = document.getElementById('progressPercent');
+
+        // Terminal messages
+        const terminalMessages = [
+            { prompt: '$', text: 'Initializing pumpfun.games client...', delay: 600 },
+            { prompt: '$', text: 'Connecting to Solana RPC endpoint...', delay: 800 },
+            { prompt: '$', text: 'Verifying network connection...', delay: 700 },
+            { prompt: '$', text: 'Fetching latest blockhash...', delay: 900 },
+            { prompt: '$', text: 'Loading wallet provider...', delay: 800 },
+            { prompt: '$', text: 'Syncing game state from blockchain...', delay: 1000 },
+            { prompt: '$', text: 'Initializing Web3.js connection...', delay: 700 },
+            { prompt: '$', text: 'Authenticating with Solana network...', delay: 900 },
+            { prompt: '$', text: 'Ready. Welcome to pumpfun.games', delay: 1000 },
+        ];
+
+        let currentProgress = 0;
+        const totalDuration = 6000; // 6 seconds total
+        const progressInterval = 50;
+
+        function addTerminalLine(prompt, text, index) {
+            setTimeout(() => {
+                const line = document.createElement('div');
+                line.className = 'terminal-line';
+                line.style.animationDelay = '0s';
+                
+                const promptSpan = document.createElement('span');
+                promptSpan.className = 'terminal-prompt';
+                promptSpan.textContent = prompt + ' ';
+                
+                const textSpan = document.createElement('span');
+                textSpan.className = 'terminal-text';
+                textSpan.textContent = text;
+                
+                line.appendChild(promptSpan);
+                line.appendChild(textSpan);
+                
+                if (index === terminalMessages.length - 1) {
+                    const cursor = document.createElement('span');
+                    cursor.className = 'terminal-cursor';
+                    line.appendChild(cursor);
+                }
+                
+                terminalContent.appendChild(line);
+            }, index === 0 ? 300 : terminalMessages.slice(0, index).reduce((sum, msg) => sum + msg.delay, 300));
+        }
+
+        function updateProgress() {
+            currentProgress += (100 / (totalDuration / progressInterval));
+            if (currentProgress > 100) currentProgress = 100;
+            
+            progressFill.style.width = currentProgress + '%';
+            progressPercent.textContent = Math.floor(currentProgress) + '%';
+            
+            if (currentProgress < 100) {
+                setTimeout(updateProgress, progressInterval);
+            } else {
+                // Complete loading
+                setTimeout(() => {
+                    loadingPopup.classList.remove('active');
+                    setTimeout(() => {
+                        entryPage.style.display = 'none';
+                        mainContent.classList.add('active');
+                        startParticles();
+                        initializeWalletBalance();
+                    }, 500);
+                }, 500);
+            }
+        }
+
+        function startLoading() {
+            entryPage.style.opacity = '0';
+            setTimeout(() => {
+                entryPage.style.display = 'none';
+                loadingPopup.classList.add('active');
+                
+                // Start terminal messages
+                terminalMessages.forEach((msg, index) => {
+                    addTerminalLine(msg.prompt, msg.text, index);
+                });
+                
+                // Start progress
+                setTimeout(updateProgress, 500);
+            }, 300);
+        }
+
+        enterButton.addEventListener('click', startLoading);
+
+        // Particle system for main content
+        function createParticle() {
+            if (!mainContent.classList.contains('active')) return;
+            
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            const isPurple = Math.random() > 0.5;
+            particle.classList.add(isPurple ? 'particle-purple' : 'particle-green');
+            
+            const size = Math.random() * 4 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = Math.random() * 100 + '%';
+            
+            const duration = Math.random() * 8 + 5;
+            particle.style.animationDuration = duration + 's';
+            particle.style.animationDelay = Math.random() * 2 + 's';
+            
+            mainContent.appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, (duration + 2) * 1000);
+        }
+
+        function startParticles() {
+            // Create particles continuously
+            setInterval(createParticle, 300);
+            
+            // Create initial particles
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => createParticle(), i * 200);
+            }
+        }
+
+        // Wallet balance initialization
+        function initializeWalletBalance() {
+            const walletCard = document.getElementById('walletCard');
+            const initOverlay = document.getElementById('initOverlay');
+            const walletAddress = document.getElementById('walletAddress');
+            const balanceAmount = document.getElementById('balanceAmount');
+
+            // Example wallet address (you can replace with actual address)
+            const address = '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU';
+            const finalBalance = 42.567; // Example balance in SOL
+
+            // Show initializing overlay
+            setTimeout(() => {
+                // Update wallet address
+                walletAddress.textContent = address;
+                
+                // Start balance animation after a short delay
+                setTimeout(() => {
+                    animateBalance(0, finalBalance, balanceAmount, () => {
+                        // Hide initializing overlay when animation completes
+                        setTimeout(() => {
+                            initOverlay.classList.add('hidden');
+                            // Show begin message after a short delay
+                            setTimeout(() => {
+                                showBeginMessage();
+                            }, 600);
+                        }, 500);
+                    });
+                }, 800);
+            }, 300);
+        }
+
+        function animateBalance(start, end, element, callback) {
+            const duration = 2000; // 2 seconds
+            const steps = 60;
+            const increment = (end - start) / steps;
+            const stepDuration = duration / steps;
+            let current = start;
+            let step = 0;
+
+            const timer = setInterval(() => {
+                step++;
+                current += increment;
+                
+                if (step >= steps) {
+                    current = end;
+                    clearInterval(timer);
+                    if (callback) callback();
+                }
+                
+                // Format number with commas and 3 decimal places
+                element.textContent = current.toLocaleString('en-US', {
+                    minimumFractionDigits: 3,
+                    maximumFractionDigits: 3
+                });
+            }, stepDuration);
+        }
+
+        // Show begin message animation
+        function showBeginMessage() {
+            const beginMessage = document.getElementById('beginMessage');
+            beginMessage.classList.add('active');
+        }
+
+        // Begin button handler
+        const beginYes = document.getElementById('beginYes');
+        const walletCard = document.getElementById('walletCard');
+        const beginMessage = document.getElementById('beginMessage');
+        const rulesBox = document.getElementById('rulesBox');
+
+        beginYes.addEventListener('click', () => {
+            // Close wallet card and begin message
+            walletCard.classList.add('closing');
+            beginMessage.classList.add('closing');
+            
+            // Show rules box after closing animation
+            setTimeout(() => {
+                walletCard.style.display = 'none';
+                beginMessage.style.display = 'none';
+                rulesBox.classList.add('active');
+                startTimer();
+            }, 600);
+        });
+
+        // Timer functionality
+        let timerInterval;
+        function startTimer() {
+            // Set timer to 24 hours from now (or you can set a specific end time)
+            const now = new Date().getTime();
+            const nextGame = now + (24 * 60 * 60 * 1000); // 24 hours from now
+            
+            // Or set to a specific time (e.g., midnight)
+            // const nextGame = new Date().setHours(24, 0, 0, 0);
+            
+            function updateTimer() {
+                const now = new Date().getTime();
+                const distance = nextGame - now;
+                
+                if (distance < 0) {
+                    // Timer expired, reset to next 24 hours
+                    const newNextGame = now + (24 * 60 * 60 * 1000);
+                    return;
+                }
+                
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                document.getElementById('timerHours').textContent = String(hours).padStart(2, '0');
+                document.getElementById('timerMinutes').textContent = String(minutes).padStart(2, '0');
+                document.getElementById('timerSeconds').textContent = String(seconds).padStart(2, '0');
+            }
+            
+            updateTimer();
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        // Acknowledge button handler
+        const acknowledgeButton = document.getElementById('acknowledgeButton');
+        const communityLinksBox = document.getElementById('communityLinksBox');
+
+        acknowledgeButton.addEventListener('click', () => {
+            // Close rules box
+            rulesBox.classList.add('closing');
+            
+            // Show community links box after closing animation
+            setTimeout(() => {
+                rulesBox.style.display = 'none';
+                if (timerInterval) clearInterval(timerInterval);
+                communityLinksBox.classList.add('active');
+            }, 600);
+        });
+
+        // Dashboard button handler
+        const dashboardButton = document.getElementById('dashboardButton');
+        dashboardButton.addEventListener('click', () => {
+            communityLinksBox.classList.remove('active');
+            setTimeout(() => {
+                communityLinksBox.style.display = 'none';
+                showDashboard();
+            }, 600);
+        });
+
+        // Accordion toggle function
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            const isActive = header.classList.contains('active');
+            
+            // Close all accordions
+            document.querySelectorAll('.accordion-header').forEach(h => {
+                h.classList.remove('active');
+                h.nextElementSibling.classList.remove('active');
+            });
+            
+            // Open clicked one if it wasn't active
+            if (!isActive) {
+                header.classList.add('active');
+                content.classList.add('active');
+            }
+        }
+
+        // Dashboard functionality
+        const dashboard = document.getElementById('dashboard');
+        const welcomeText = document.getElementById('welcomeText');
+        const dashboardTimer = document.getElementById('dashboardTimer');
+        let dashboardTimerInterval;
+
+        function typewriterEffect(text, element, callback) {
+            element.textContent = '';
+            let i = 0;
+            const cursor = document.createElement('span');
+            cursor.className = 'typewriter-cursor';
+            
+            function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, 100);
+                } else {
+                    element.appendChild(cursor);
+                    if (callback) callback();
+                }
+            }
+            type();
+        }
+
+        function showDashboard() {
+            dashboard.style.display = 'block';
+            dashboard.classList.add('active');
+            
+            // Set wallet balance from previous initialization
+            const balanceAmount = document.getElementById('balanceAmount');
+            if (balanceAmount) {
+                const balance = balanceAmount.textContent;
+                document.getElementById('walletTitleBalance').textContent = balance;
+            }
+            
+            // Set rewards amount (you can customize this - for now using a portion of balance)
+            const balanceAmountEl = document.getElementById('balanceAmount');
+            if (balanceAmountEl) {
+                const balance = parseFloat(balanceAmountEl.textContent.replace(/,/g, ''));
+                // Example: rewards are 10% of balance (you can change this logic)
+                const rewards = (balance * 0.1).toFixed(3);
+                document.getElementById('rewardsAmount').textContent = parseFloat(rewards).toLocaleString('en-US', {
+                    minimumFractionDigits: 3,
+                    maximumFractionDigits: 3
+                });
+            }
+            
+            // Play background music
+            const dashboardMusic = document.getElementById('dashboardMusic');
+            if (dashboardMusic) {
+                // Try to play music (may require user interaction first)
+                const playPromise = dashboardMusic.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        // Auto-play was prevented, user interaction required
+                        console.log('Audio play prevented, will play on user interaction');
+                    });
+                }
+            }
+            
+            // Start typewriter effect
+            typewriterEffect('Welcome User to The Pumpfun Games', welcomeText, () => {
+                // Start dashboard timer
+                startDashboardTimer();
+            });
+        }
+
+        function startDashboardTimer() {
+            // Set timer to 24 hours from now
+            const now = new Date().getTime();
+            const nextGame = now + (24 * 60 * 60 * 1000);
+            
+            function updateDashboardTimer() {
+                const now = new Date().getTime();
+                const distance = nextGame - now;
+                
+                if (distance < 0) {
+                    // Timer expired, reset to next 24 hours
+                    const newNextGame = now + (24 * 60 * 60 * 1000);
+                    return;
+                }
+                
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                document.getElementById('dashHours').textContent = String(hours).padStart(2, '0');
+                document.getElementById('dashMinutes').textContent = String(minutes).padStart(2, '0');
+                document.getElementById('dashSeconds').textContent = String(seconds).padStart(2, '0');
+            }
+            
+            updateDashboardTimer();
+            dashboardTimerInterval = setInterval(updateDashboardTimer, 1000);
+        }
+
+        // Copy Contract Address Function
+        function copyContractAddress() {
+            const contractAddress = document.getElementById('contractAddress');
+            const copyButton = document.getElementById('copyButton');
+            
+            // Get the text content - use innerText to avoid hidden characters
+            let addressText = contractAddress.innerText || contractAddress.textContent;
+            addressText = addressText.trim().replace(/\s+/g, '');
+            
+            // Copy to clipboard
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(addressText).then(() => {
+                    // Show feedback
+                    const originalText = copyButton.textContent;
+                    copyButton.textContent = 'Copied!';
+                    copyButton.classList.add('copied');
+                    
+                    setTimeout(() => {
+                        copyButton.textContent = originalText;
+                        copyButton.classList.remove('copied');
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                    fallbackCopy(addressText, copyButton);
+                });
+            } else {
+                // Fallback for older browsers
+                fallbackCopy(addressText, copyButton);
+            }
+        }
+
+        function fallbackCopy(text, button) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    const originalText = button.textContent;
+                    button.textContent = 'Copied!';
+                    button.classList.add('copied');
+                    
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.classList.remove('copied');
+                    }, 2000);
+                } else {
+                    alert('Failed to copy. Please copy manually: ' + text);
+                }
+            } catch (err) {
+                console.error('Fallback copy failed:', err);
+                alert('Failed to copy. Please copy manually: ' + text);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+    </script>
+</body>
+</html>
