@@ -2729,10 +2729,10 @@
         <div class="community-links-box" id="communityLinksBox">
             <div class="community-title">Join The Community</div>
             <div class="community-links">
-                <a href="https://x.com/ThePumpFunGames" target="_blank" class="community-link spotlight" id="xLink">
+                <a href="https://x.com/ThePumpFunGames" target="_blank" class="community-link spotlight" id="xLink" onclick="SoundEffects.playClick();">
                     X (Twitter) @ThePumpFunGames
                 </a>
-                <a href="https://x.com/i/communities/1998544727960875122" target="_blank" class="community-link" id="communityLink">
+                <a href="https://x.com/i/communities/1998544727960875122" target="_blank" class="community-link" id="communityLink" onclick="SoundEffects.playClick();">
                     Communities
                 </a>
             </div>
@@ -2794,10 +2794,10 @@
 
             <!-- Action Buttons -->
             <div class="action-buttons">
-                <a href="https://dexscreener.com/solana" target="_blank" class="action-button action-button-dex">
+                <a href="https://dexscreener.com/solana" target="_blank" class="action-button action-button-dex" onclick="SoundEffects.playClick();">
                     Dex
                 </a>
-                <a href="https://pump.fun" target="_blank" class="action-button action-button-swap">
+                <a href="https://pump.fun" target="_blank" class="action-button action-button-swap" onclick="SoundEffects.playClick();">
                     Swap
                 </a>
             </div>
@@ -2808,6 +2808,159 @@
     <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
 
     <script>
+        // Sound Effects System - Cyber/Futuristic Theme
+        const SoundEffects = {
+            audioContext: null,
+            volume: 0.3, // 30% volume for subtle effects
+            
+            init() {
+                try {
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) {
+                    console.log('Web Audio API not supported, sounds disabled');
+                }
+            },
+            
+            // Generate a futuristic beep sound
+            playClick() {
+                if (!this.audioContext) return;
+                const osc = this.audioContext.createOscillator();
+                const gain = this.audioContext.createGain();
+                
+                osc.connect(gain);
+                gain.connect(this.audioContext.destination);
+                
+                osc.frequency.value = 800;
+                osc.type = 'sine';
+                
+                gain.gain.setValueAtTime(0, this.audioContext.currentTime);
+                gain.gain.linearRampToValueAtTime(this.volume * 0.5, this.audioContext.currentTime + 0.01);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.1);
+                
+                osc.start(this.audioContext.currentTime);
+                osc.stop(this.audioContext.currentTime + 0.1);
+            },
+            
+            // Play a whoosh/swish transition sound
+            playWhoosh() {
+                if (!this.audioContext) return;
+                const osc = this.audioContext.createOscillator();
+                const gain = this.audioContext.createGain();
+                
+                osc.connect(gain);
+                gain.connect(this.audioContext.destination);
+                
+                osc.frequency.setValueAtTime(400, this.audioContext.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(150, this.audioContext.currentTime + 0.2);
+                osc.type = 'sawtooth';
+                
+                gain.gain.setValueAtTime(0, this.audioContext.currentTime);
+                gain.gain.linearRampToValueAtTime(this.volume * 0.4, this.audioContext.currentTime + 0.05);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.2);
+                
+                osc.start(this.audioContext.currentTime);
+                osc.stop(this.audioContext.currentTime + 0.2);
+            },
+            
+            // Play success/confirm sound
+            playSuccess() {
+                if (!this.audioContext) return;
+                const osc1 = this.audioContext.createOscillator();
+                const osc2 = this.audioContext.createOscillator();
+                const gain = this.audioContext.createGain();
+                
+                osc1.connect(gain);
+                osc2.connect(gain);
+                gain.connect(this.audioContext.destination);
+                
+                osc1.frequency.value = 523.25; // C5
+                osc2.frequency.value = 659.25; // E5
+                osc1.type = 'sine';
+                osc2.type = 'sine';
+                
+                gain.gain.setValueAtTime(0, this.audioContext.currentTime);
+                gain.gain.linearRampToValueAtTime(this.volume * 0.6, this.audioContext.currentTime + 0.05);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.3);
+                
+                osc1.start(this.audioContext.currentTime);
+                osc2.start(this.audioContext.currentTime);
+                osc1.stop(this.audioContext.currentTime + 0.3);
+                osc2.stop(this.audioContext.currentTime + 0.3);
+            },
+            
+            // Play accordion expand sound
+            playExpand() {
+                if (!this.audioContext) return;
+                const osc = this.audioContext.createOscillator();
+                const gain = this.audioContext.createGain();
+                
+                osc.connect(gain);
+                gain.connect(this.audioContext.destination);
+                
+                osc.frequency.setValueAtTime(300, this.audioContext.currentTime);
+                osc.frequency.linearRampToValueAtTime(500, this.audioContext.currentTime + 0.15);
+                osc.type = 'triangle';
+                
+                gain.gain.setValueAtTime(0, this.audioContext.currentTime);
+                gain.gain.linearRampToValueAtTime(this.volume * 0.3, this.audioContext.currentTime + 0.05);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.15);
+                
+                osc.start(this.audioContext.currentTime);
+                osc.stop(this.audioContext.currentTime + 0.15);
+            },
+            
+            // Play balance reveal sound
+            playReveal() {
+                if (!this.audioContext) return;
+                const osc = this.audioContext.createOscillator();
+                const gain = this.audioContext.createGain();
+                
+                osc.connect(gain);
+                gain.connect(this.audioContext.destination);
+                
+                osc.frequency.setValueAtTime(200, this.audioContext.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(800, this.audioContext.currentTime + 0.3);
+                osc.type = 'sine';
+                
+                gain.gain.setValueAtTime(0, this.audioContext.currentTime);
+                gain.gain.linearRampToValueAtTime(this.volume * 0.4, this.audioContext.currentTime + 0.1);
+                gain.gain.linearRampToValueAtTime(this.volume * 0.4, this.audioContext.currentTime + 0.2);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.3);
+                
+                osc.start(this.audioContext.currentTime);
+                osc.stop(this.audioContext.currentTime + 0.3);
+            },
+            
+            // Play copy success sound
+            playCopy() {
+                if (!this.audioContext) return;
+                const osc = this.audioContext.createOscillator();
+                const gain = this.audioContext.createGain();
+                
+                osc.connect(gain);
+                gain.connect(this.audioContext.destination);
+                
+                osc.frequency.value = 1000;
+                osc.type = 'square';
+                
+                gain.gain.setValueAtTime(0, this.audioContext.currentTime);
+                gain.gain.linearRampToValueAtTime(this.volume * 0.3, this.audioContext.currentTime + 0.01);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.08);
+                
+                osc.start(this.audioContext.currentTime);
+                osc.stop(this.audioContext.currentTime + 0.08);
+            }
+        };
+        
+        // Initialize sound effects on user interaction
+        function initSoundEffects() {
+            SoundEffects.init();
+        }
+        
+        // Initialize on first user interaction (required by browsers)
+        document.addEventListener('click', initSoundEffects, { once: true });
+        document.addEventListener('touchstart', initSoundEffects, { once: true });
+        
         // Helius RPC Configuration
         const HELIUS_API_KEY = 'e7f8cbe0-8718-46c2-9423-013252d80521';
         const HELIUS_RPC_URL = `https://mainnet.helius-rpc.com/?api-key=${HELIUS_API_KEY}`;
@@ -2913,6 +3066,8 @@
         }
 
         function startLoading() {
+            SoundEffects.playClick(); // Play click sound
+            initSoundEffects(); // Ensure audio context is initialized
             entryPage.style.opacity = '0';
             setTimeout(() => {
                 entryPage.style.display = 'none';
@@ -3050,6 +3205,7 @@
                     // Start balance animation after a short delay
                     setTimeout(() => {
                         animateBalance(0, balance, balanceAmount, () => {
+                            SoundEffects.playReveal(); // Play reveal sound when balance loads
                             // Hide initializing overlay when animation completes
                             setTimeout(() => {
                                 initOverlay.classList.add('hidden');
@@ -3116,9 +3272,11 @@
         const rulesBox = document.getElementById('rulesBox');
 
         beginYes.addEventListener('click', () => {
+            SoundEffects.playClick(); // Play click sound
             // Close wallet card and begin message
             walletCard.classList.add('closing');
             beginMessage.classList.add('closing');
+            SoundEffects.playWhoosh(); // Play transition sound
             
             // Show rules box after closing animation
             setTimeout(() => {
@@ -3167,8 +3325,10 @@
         const communityLinksBox = document.getElementById('communityLinksBox');
 
         acknowledgeButton.addEventListener('click', () => {
+            SoundEffects.playClick(); // Play click sound
             // Close rules box
             rulesBox.classList.add('closing');
+            SoundEffects.playWhoosh(); // Play transition sound
             
             // Show community links box after closing animation
             setTimeout(() => {
@@ -3181,7 +3341,9 @@
         // Dashboard button handler
         const dashboardButton = document.getElementById('dashboardButton');
         dashboardButton.addEventListener('click', () => {
+            SoundEffects.playClick(); // Play click sound
             communityLinksBox.classList.remove('active');
+            SoundEffects.playSuccess(); // Play success sound for going to dashboard
             setTimeout(() => {
                 communityLinksBox.style.display = 'none';
                 showDashboard();
@@ -3201,6 +3363,8 @@
             
             // Open clicked one if it wasn't active
             if (!isActive) {
+                SoundEffects.playClick(); // Play click sound
+                SoundEffects.playExpand(); // Play expand sound
                 header.classList.add('active');
                 content.classList.add('active');
             }
@@ -3330,6 +3494,7 @@
             // Copy to clipboard
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(addressText).then(() => {
+                    SoundEffects.playCopy(); // Play copy success sound
                     // Show feedback
                     const originalText = copyButton.textContent;
                     copyButton.textContent = 'Copied!';
@@ -3362,6 +3527,7 @@
             try {
                 const successful = document.execCommand('copy');
                 if (successful) {
+                    SoundEffects.playCopy(); // Play copy success sound
                     const originalText = button.textContent;
                     button.textContent = 'Copied!';
                     button.classList.add('copied');
