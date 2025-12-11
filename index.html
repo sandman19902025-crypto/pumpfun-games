@@ -2862,42 +2862,33 @@
             }, 600);
         });
 
-        // Timer functionality - Persistent end time using localStorage
+        // Timer functionality - Always count down to next midnight (12:00 AM)
         let timerInterval;
         
-        // Get or set the next game time (persists across page loads)
-        function getNextGameTime() {
-            const stored = localStorage.getItem('nextGameTime');
-            const now = new Date().getTime();
+        // Calculate next midnight (12:00 AM / 00:00:00)
+        function getNextMidnight() {
+            const now = new Date();
+            const midnight = new Date();
+            midnight.setHours(0, 0, 0, 0); // Set to today's midnight
             
-            if (stored) {
-                const storedTime = parseInt(stored, 10);
-                // If stored time is in the future, use it
-                if (storedTime > now) {
-                    return storedTime;
-                }
+            // If we're past midnight today, get midnight tomorrow
+            if (now >= midnight) {
+                midnight.setDate(midnight.getDate() + 1);
             }
             
-            // No stored time or it expired - set new time (next midnight)
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            tomorrow.setHours(0, 0, 0, 0);
-            const nextGame = tomorrow.getTime();
-            
-            localStorage.setItem('nextGameTime', nextGame.toString());
-            return nextGame;
+            return midnight.getTime();
         }
         
         function startTimer() {
-            let nextGame = getNextGameTime();
+            let nextGame = getNextMidnight();
             
             function updateTimer() {
                 const now = new Date().getTime();
                 const distance = nextGame - now;
                 
-                if (distance < 0) {
-                    // Timer expired, set new time for next 24 hours
-                    nextGame = getNextGameTime();
+                if (distance <= 0) {
+                    // Timer hit midnight - reset to next midnight (24 hours)
+                    nextGame = getNextMidnight();
                     // Update immediately with new time
                     const newDistance = nextGame - now;
                     const hours = Math.floor((newDistance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -3036,16 +3027,16 @@
         }
 
         function startDashboardTimer() {
-            // Use the same persistent timer as the rules box timer
-            let nextGame = getNextGameTime();
+            // Use the same midnight reset timer as the rules box
+            let nextGame = getNextMidnight();
             
             function updateDashboardTimer() {
                 const now = new Date().getTime();
                 const distance = nextGame - now;
                 
-                if (distance < 0) {
-                    // Timer expired, set new time for next 24 hours
-                    nextGame = getNextGameTime();
+                if (distance <= 0) {
+                    // Timer hit midnight - reset to next midnight (24 hours)
+                    nextGame = getNextMidnight();
                     // Update immediately with new time
                     const newDistance = nextGame - now;
                     const hours = Math.floor((newDistance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
