@@ -2809,12 +2809,8 @@
 
     <script>
         // Helius RPC Configuration
-        // API key is injected at build time from Netlify environment variables
-        // For local development, you can set it in browser console: window.HELIUS_API_KEY = 'your-key'
-        const HELIUS_API_KEY = window.HELIUS_API_KEY || 'PLACEHOLDER_KEY_REPLACE_IN_NETLIFY';
-        const HELIUS_RPC_URL = HELIUS_API_KEY !== 'PLACEHOLDER_KEY_REPLACE_IN_NETLIFY' 
-            ? `https://mainnet.helius-rpc.com/?api-key=${HELIUS_API_KEY}`
-            : 'https://api.mainnet-beta.solana.com'; // Fallback to public RPC
+        const HELIUS_API_KEY = 'e7f8cbe0-8718-46c2-9423-013252d80521';
+        const HELIUS_RPC_URL = `https://mainnet.helius-rpc.com/?api-key=${HELIUS_API_KEY}`;
         
         // Initialize Solana connection using Helius
         let solanaConnection = null;
