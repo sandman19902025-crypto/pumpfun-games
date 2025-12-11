@@ -2871,7 +2871,7 @@
             }
         }
 
-        // Wallet balance initialization
+        // Wallet balance initialization with timeout protection
         async function initializeWalletBalance() {
             const walletCard = document.getElementById('walletCard');
             const initOverlay = document.getElementById('initOverlay');
@@ -2879,50 +2879,65 @@
             const balanceAmount = document.getElementById('balanceAmount');
 
             const address = CREATOR_WALLET_ADDRESS;
+            
+            // Timeout after 5 seconds to prevent infinite loading
+            const timeoutId = setTimeout(() => {
+                console.warn('Balance fetch timeout - proceeding with default');
+                balanceAmount.textContent = '0.000';
+                walletAddress.textContent = address;
+                initOverlay.classList.add('hidden');
+                setTimeout(() => {
+                    showBeginMessage();
+                }, 600);
+            }, 5000);
 
             // Show initializing overlay
             setTimeout(() => {
                 // Update wallet address
                 walletAddress.textContent = address;
                 
-                // Fetch real balance from Solscan
-                fetchSolanaBalance(address).then(finalBalance => {
-                    if (finalBalance === null) {
-                        // If API fails, show 0 with error message
+                // Fetch real balance from Solana RPC (with timeout)
+                Promise.race([
+                    fetchSolanaBalance(address),
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 4000))
+                ]).then(finalBalance => {
+                    clearTimeout(timeoutId);
+                    
+                    if (finalBalance === null || finalBalance === undefined) {
+                        // If API fails, show 0 and continue
                         balanceAmount.textContent = '0.000';
-                        walletAddress.textContent = address + ' (API Error)';
+                        walletAddress.textContent = address;
                         setTimeout(() => {
                             initOverlay.classList.add('hidden');
                             setTimeout(() => {
                                 showBeginMessage();
                             }, 600);
-                        }, 500);
+                        }, 300);
                         return;
                     }
                     
-                    // Start balance animation with real balance
-                    setTimeout(() => {
-                        animateBalance(0, finalBalance, balanceAmount, () => {
-                            // Hide initializing overlay when animation completes
+                    // Start balance animation with real balance (quick animation)
+                    animateBalance(0, finalBalance, balanceAmount, () => {
+                        // Hide initializing overlay when animation completes
+                        setTimeout(() => {
+                            initOverlay.classList.add('hidden');
+                            // Show begin message after a short delay
                             setTimeout(() => {
-                                initOverlay.classList.add('hidden');
-                                // Show begin message after a short delay
-                                setTimeout(() => {
-                                    showBeginMessage();
-                                }, 600);
-                            }, 500);
-                        });
-                    }, 300);
+                                showBeginMessage();
+                            }, 400);
+                        }, 300);
+                    });
                 }).catch(error => {
+                    clearTimeout(timeoutId);
                     console.error('Error initializing wallet balance:', error);
                     balanceAmount.textContent = '0.000';
-                    walletAddress.textContent = address + ' (Error)';
+                    walletAddress.textContent = address;
                     setTimeout(() => {
                         initOverlay.classList.add('hidden');
                         setTimeout(() => {
                             showBeginMessage();
-                        }, 600);
-                    }, 500);
+                        }, 400);
+                    }, 300);
                 });
             }, 300);
         }
@@ -2945,8 +2960,9 @@
         }
 
         function animateBalance(start, end, element, callback) {
-            const duration = 2000; // 2 seconds
-            const steps = 60;
+            // Faster animation - 1 second instead of 2
+            const duration = 1000;
+            const steps = 30;
             const increment = (end - start) / steps;
             const stepDuration = duration / steps;
             let current = start;
