@@ -3127,7 +3127,11 @@
             initializeSolanaConnection();
         }
 
-        // Referral System
+        // Referral System - Railway API Configuration
+        // Replace 'YOUR_RAILWAY_API_URL' with your actual Railway deployment URL
+        // You'll get this after deploying to Railway (see RAILWAY_SETUP.md)
+        const REFERRAL_API_URL = 'https://YOUR_RAILWAY_API_URL.up.railway.app';
+        
         const ReferralSystem = {
             // Check for referral parameter on page load
             checkReferral() {
@@ -3141,48 +3145,58 @@
                         handle = handle.substring(1);
                     }
                     
-                    // Track the referral click
+                    // Track the referral click (async, don't wait)
                     this.trackReferral(handle);
                     
-                    // Redirect to X profile
+                    // Redirect to X profile immediately
                     window.location.href = `https://x.com/${handle}`;
                 }
             },
             
-            // Track referral click (stores in localStorage + optional backend)
-            trackReferral(handle) {
+            // Track referral click (Railway API + localStorage fallback)
+            async trackReferral(handle) {
                 const referralCode = `@${handle}`;
-                const storageKey = `referral_${referralCode}`;
                 
-                // Get current count from localStorage
-                let count = parseInt(localStorage.getItem(storageKey) || '0', 10);
-                count += 1;
-                localStorage.setItem(storageKey, count.toString());
-                
-                // Optional: Send to backend API for server-side tracking
-                // Uncomment and configure your backend endpoint:
-                /*
-                fetch('https://your-backend-api.com/api/track-referral', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        referralCode: referralCode,
-                        timestamp: new Date().toISOString(),
-                        userAgent: navigator.userAgent,
-                        referrer: document.referrer
-                    })
-                }).catch(err => console.error('Failed to track referral:', err));
-                */
-                
-                console.log(`Referral tracked: ${referralCode} (${count} clicks)`);
+                // Try to send to Railway API first
+                try {
+                    await fetch(`${REFERRAL_API_URL}/api/track-referral`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            referralCode: referralCode,
+                            userAgent: navigator.userAgent,
+                            referrer: document.referrer
+                        })
+                    });
+                    console.log(`Referral tracked on server: ${referralCode}`);
+                } catch (err) {
+                    console.error('Failed to track referral on server, using localStorage:', err);
+                    // Fallback to localStorage if API fails
+                    const storageKey = `referral_${referralCode}`;
+                    let count = parseInt(localStorage.getItem(storageKey) || '0', 10);
+                    count += 1;
+                    localStorage.setItem(storageKey, count.toString());
+                }
             },
             
-            // Get referral stats for a handle
-            getReferralStats(handle) {
+            // Get referral stats from Railway API (with localStorage fallback)
+            async getReferralStats(handle) {
                 const referralCode = `@${handle}`;
+                
+                // Try to fetch from Railway API
+                try {
+                    const response = await fetch(`${REFERRAL_API_URL}/api/referral-stats/${encodeURIComponent(referralCode)}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        return data.totalClicks || 0;
+                    }
+                } catch (err) {
+                    console.error('Failed to fetch stats from API, using localStorage:', err);
+                }
+                
+                // Fallback to localStorage
                 const storageKey = `referral_${referralCode}`;
-                const count = parseInt(localStorage.getItem(storageKey) || '0', 10);
-                return count;
+                return parseInt(localStorage.getItem(storageKey) || '0', 10);
             }
         };
         
@@ -3190,7 +3204,7 @@
         ReferralSystem.checkReferral();
         
         // Generate referral link function
-        function generateReferralLink() {
+        async function generateReferralLink() {
             const input = document.getElementById('referralHandleInput');
             const linkContainer = document.getElementById('referralLinkContainer');
             const linkDisplay = document.getElementById('referralLinkDisplay');
@@ -3218,17 +3232,42 @@
             linkDisplay.textContent = referralLink;
             linkContainer.style.display = 'flex';
             
-            // Show stats if available
-            const stats = ReferralSystem.getReferralStats(handle);
-            if (stats > 0) {
-                clickCount.textContent = stats;
-                statsContainer.style.display = 'block';
+            // Fetch stats from Railway API
+            try {
+                const stats = await ReferralSystem.getReferralStats(handle);
+                if (stats > 0) {
+                    clickCount.textContent = stats;
+                    statsContainer.style.display = 'block';
+                } else {
+                    statsContainer.style.display = 'none';
+                }
+            } catch (err) {
+                console.error('Error fetching stats:', err);
             }
             
             // Store handle in localStorage for later use
             localStorage.setItem('userReferralHandle', handle);
             
             SoundEffects.playSuccess();
+        }
+        
+        // Load and refresh referral stats
+        async function refreshReferralStats() {
+            const savedHandle = localStorage.getItem('userReferralHandle');
+            if (!savedHandle) return;
+            
+            const statsContainer = document.getElementById('referralStats');
+            const clickCount = document.getElementById('referralClickCount');
+            
+            try {
+                const stats = await ReferralSystem.getReferralStats(savedHandle);
+                if (stats > 0) {
+                    clickCount.textContent = stats;
+                    statsContainer.style.display = 'block';
+                }
+            } catch (err) {
+                console.error('Error refreshing stats:', err);
+            }
         }
         
         // Copy referral link function
@@ -3748,6 +3787,8 @@
                 startDashboardTimer();
                 // Load saved referral handle
                 loadSavedReferral();
+                // Refresh referral stats from API
+                refreshReferralStats();
             });
         }
 
