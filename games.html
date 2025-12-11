@@ -1921,6 +1921,95 @@
             left: 100%;
         }
 
+        /* Referral Section */
+        .referral-section {
+            margin-top: 2rem;
+        }
+
+        .referral-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .referral-input-group {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .referral-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 0.8rem 1.2rem;
+            background: rgba(138, 43, 226, 0.1);
+            border: 2px solid rgba(138, 43, 226, 0.3);
+            color: rgba(84, 213, 146, 0.9);
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .referral-input:focus {
+            outline: none;
+            border-color: rgba(138, 43, 226, 0.8);
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.4);
+            background: rgba(138, 43, 226, 0.15);
+        }
+
+        .referral-input::placeholder {
+            color: rgba(138, 43, 226, 0.5);
+        }
+
+        .referral-link-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            background: rgba(138, 43, 226, 0.1);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            padding: 1.5rem 2rem;
+            border-radius: 4px;
+            flex-wrap: wrap;
+        }
+
+        .referral-link {
+            flex: 1;
+            color: rgba(84, 213, 146, 0.9);
+            font-size: 0.95rem;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+            text-shadow: 0 0 5px rgba(84, 213, 146, 0.5);
+            line-height: 1.6;
+            overflow-wrap: break-word;
+        }
+
+        .referral-stats {
+            padding: 1rem;
+            background: rgba(84, 213, 146, 0.1);
+            border: 1px solid rgba(84, 213, 146, 0.3);
+            border-radius: 4px;
+        }
+
+        .referral-stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: rgba(84, 213, 146, 0.9);
+            font-family: 'Courier New', monospace;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: rgba(84, 213, 146, 1);
+        }
+
         /* Action Buttons */
         .action-buttons {
             display: flex;
@@ -2464,6 +2553,24 @@
                 flex-shrink: 0;
             }
 
+            .referral-input-group {
+                flex-direction: column;
+            }
+
+            .referral-input {
+                width: 100%;
+                min-width: auto;
+            }
+
+            .referral-link-container {
+                flex-direction: column;
+                padding: 1.5rem;
+            }
+
+            .referral-link {
+                font-size: 0.85rem;
+            }
+
             .action-buttons {
                 flex-direction: column;
                 gap: 2rem;
@@ -2563,6 +2670,15 @@
                 width: 100%;
                 padding: 1.1rem;
                 font-size: 0.95rem;
+            }
+
+            .referral-input {
+                font-size: 0.85rem;
+                padding: 0.7rem 1rem;
+            }
+
+            .referral-link {
+                font-size: 0.75rem;
             }
 
             .action-buttons {
@@ -2792,6 +2908,27 @@
                 </div>
             </div>
 
+            <!-- Referral Section -->
+            <div class="contract-section referral-section">
+                <div class="contract-label">Your Referral Link</div>
+                <div class="referral-content">
+                    <div class="referral-input-group">
+                        <input type="text" id="referralHandleInput" placeholder="Enter your X handle (e.g., @username)" class="referral-input">
+                        <button class="copy-button" id="generateReferralBtn" onclick="generateReferralLink()">Generate Link</button>
+                    </div>
+                    <div class="referral-link-container" id="referralLinkContainer" style="display: none;">
+                        <div class="referral-link" id="referralLinkDisplay"></div>
+                        <button class="copy-button" id="copyReferralBtn" onclick="copyReferralLink()">Copy Link</button>
+                    </div>
+                    <div class="referral-stats" id="referralStats" style="display: none;">
+                        <div class="referral-stat-item">
+                            <span class="stat-label">Clicks:</span>
+                            <span class="stat-value" id="referralClickCount">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Action Buttons -->
             <div class="action-buttons">
                 <a href="https://dexscreener.com/solana" target="_blank" class="action-button action-button-dex" onclick="SoundEffects.playClick();">
@@ -2988,6 +3125,149 @@
             document.addEventListener('DOMContentLoaded', initializeSolanaConnection);
         } else {
             initializeSolanaConnection();
+        }
+
+        // Referral System
+        const ReferralSystem = {
+            // Check for referral parameter on page load
+            checkReferral() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const ref = urlParams.get('ref');
+                
+                if (ref) {
+                    // Clean up the handle (remove @ if present)
+                    let handle = ref.trim();
+                    if (handle.startsWith('@')) {
+                        handle = handle.substring(1);
+                    }
+                    
+                    // Track the referral click
+                    this.trackReferral(handle);
+                    
+                    // Redirect to X profile
+                    window.location.href = `https://x.com/${handle}`;
+                }
+            },
+            
+            // Track referral click (stores in localStorage + optional backend)
+            trackReferral(handle) {
+                const referralCode = `@${handle}`;
+                const storageKey = `referral_${referralCode}`;
+                
+                // Get current count from localStorage
+                let count = parseInt(localStorage.getItem(storageKey) || '0', 10);
+                count += 1;
+                localStorage.setItem(storageKey, count.toString());
+                
+                // Optional: Send to backend API for server-side tracking
+                // Uncomment and configure your backend endpoint:
+                /*
+                fetch('https://your-backend-api.com/api/track-referral', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        referralCode: referralCode,
+                        timestamp: new Date().toISOString(),
+                        userAgent: navigator.userAgent,
+                        referrer: document.referrer
+                    })
+                }).catch(err => console.error('Failed to track referral:', err));
+                */
+                
+                console.log(`Referral tracked: ${referralCode} (${count} clicks)`);
+            },
+            
+            // Get referral stats for a handle
+            getReferralStats(handle) {
+                const referralCode = `@${handle}`;
+                const storageKey = `referral_${referralCode}`;
+                const count = parseInt(localStorage.getItem(storageKey) || '0', 10);
+                return count;
+            }
+        };
+        
+        // Check for referral on page load
+        ReferralSystem.checkReferral();
+        
+        // Generate referral link function
+        function generateReferralLink() {
+            const input = document.getElementById('referralHandleInput');
+            const linkContainer = document.getElementById('referralLinkContainer');
+            const linkDisplay = document.getElementById('referralLinkDisplay');
+            const statsContainer = document.getElementById('referralStats');
+            const clickCount = document.getElementById('referralClickCount');
+            
+            let handle = input.value.trim();
+            
+            // Validate handle
+            if (!handle) {
+                alert('Please enter your X handle');
+                return;
+            }
+            
+            // Remove @ if present for consistency
+            if (handle.startsWith('@')) {
+                handle = handle.substring(1);
+            }
+            
+            // Generate referral link
+            const baseUrl = window.location.origin + window.location.pathname;
+            const referralLink = `${baseUrl}?ref=@${handle}`;
+            
+            // Display the link
+            linkDisplay.textContent = referralLink;
+            linkContainer.style.display = 'flex';
+            
+            // Show stats if available
+            const stats = ReferralSystem.getReferralStats(handle);
+            if (stats > 0) {
+                clickCount.textContent = stats;
+                statsContainer.style.display = 'block';
+            }
+            
+            // Store handle in localStorage for later use
+            localStorage.setItem('userReferralHandle', handle);
+            
+            SoundEffects.playSuccess();
+        }
+        
+        // Copy referral link function
+        function copyReferralLink() {
+            const linkDisplay = document.getElementById('referralLinkDisplay');
+            const copyBtn = document.getElementById('copyReferralBtn');
+            
+            const linkText = linkDisplay.textContent;
+            
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(linkText).then(() => {
+                    SoundEffects.playCopy();
+                    const originalText = copyBtn.textContent;
+                    copyBtn.textContent = 'Copied!';
+                    copyBtn.classList.add('copied');
+                    
+                    setTimeout(() => {
+                        copyBtn.textContent = originalText;
+                        copyBtn.classList.remove('copied');
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                    fallbackCopy(linkText, copyBtn);
+                });
+            } else {
+                fallbackCopy(linkText, copyBtn);
+            }
+        }
+        
+        // Load saved referral handle on dashboard
+        function loadSavedReferral() {
+            const savedHandle = localStorage.getItem('userReferralHandle');
+            if (savedHandle) {
+                const input = document.getElementById('referralHandleInput');
+                input.value = savedHandle;
+                
+                // Auto-generate link if handle exists
+                generateReferralLink();
+            }
         }
 
         const enterButton = document.getElementById('enterButton');
@@ -3466,6 +3746,8 @@
             typewriterEffect('Welcome User to The Pumpfun Games', welcomeText, () => {
                 // Start dashboard timer
                 startDashboardTimer();
+                // Load saved referral handle
+                loadSavedReferral();
             });
         }
 
