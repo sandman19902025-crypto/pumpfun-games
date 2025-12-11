@@ -2477,7 +2477,9 @@
                     </div>
                 </div>
                 <h2 class="wallet-label">Creator Wallet</h2>
-                <div class="wallet-address code" id="walletAddress">Loading address...</div>
+                <a href="https://solscan.io/account/DsCJ5siuJTPQtQa3A9N69azGZaWtUPzi9VPp2G9Jfpx9" target="_blank" style="text-decoration: none; color: inherit;">
+                    <div class="wallet-address code" id="walletAddress">Loading address...</div>
+                </a>
                 <div class="balance-section">
                     <div class="balance-label">Balance</div>
                     <div class="balance-row">
@@ -2778,36 +2780,114 @@
             }
         }
 
+        // Creator wallet address
+        const CREATOR_WALLET_ADDRESS = 'DsCJ5siuJTPQtQa3A9N69azGZaWtUPzi9VPp2G9Jfpx9';
+        
+        // Fetch balance from Solscan API
+        async function fetchSolanaBalance(address) {
+            try {
+                // Solscan API endpoint
+                const response = await fetch(`https://public-api.solscan.io/account/balance?address=${address}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // Balance is returned in lamports, convert to SOL (1 SOL = 1,000,000,000 lamports)
+                const balanceInLamports = data.lamports || data || 0;
+                const balanceInSOL = balanceInLamports / 1000000000;
+                
+                return balanceInSOL;
+            } catch (error) {
+                console.error('Error fetching balance from Solscan:', error);
+                // Fallback: try alternative Solscan API endpoint
+                try {
+                    const altResponse = await fetch(`https://api.solscan.io/account/balance?address=${address}`);
+                    if (altResponse.ok) {
+                        const altData = await altResponse.json();
+                        const balanceInLamports = altData.lamports || altData || 0;
+                        return balanceInLamports / 1000000000;
+                    }
+                } catch (altError) {
+                    console.error('Alternative API also failed:', altError);
+                }
+                return null;
+            }
+        }
+
         // Wallet balance initialization
-        function initializeWalletBalance() {
+        async function initializeWalletBalance() {
             const walletCard = document.getElementById('walletCard');
             const initOverlay = document.getElementById('initOverlay');
             const walletAddress = document.getElementById('walletAddress');
             const balanceAmount = document.getElementById('balanceAmount');
 
-            // Example wallet address (you can replace with actual address)
-            const address = '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU';
-            const finalBalance = 42.567; // Example balance in SOL
+            const address = CREATOR_WALLET_ADDRESS;
 
             // Show initializing overlay
             setTimeout(() => {
                 // Update wallet address
                 walletAddress.textContent = address;
                 
-                // Start balance animation after a short delay
-                setTimeout(() => {
-                    animateBalance(0, finalBalance, balanceAmount, () => {
-                        // Hide initializing overlay when animation completes
+                // Fetch real balance from Solscan
+                fetchSolanaBalance(address).then(finalBalance => {
+                    if (finalBalance === null) {
+                        // If API fails, show 0 with error message
+                        balanceAmount.textContent = '0.000';
+                        walletAddress.textContent = address + ' (API Error)';
                         setTimeout(() => {
                             initOverlay.classList.add('hidden');
-                            // Show begin message after a short delay
                             setTimeout(() => {
                                 showBeginMessage();
                             }, 600);
                         }, 500);
-                    });
-                }, 800);
+                        return;
+                    }
+                    
+                    // Start balance animation with real balance
+                    setTimeout(() => {
+                        animateBalance(0, finalBalance, balanceAmount, () => {
+                            // Hide initializing overlay when animation completes
+                            setTimeout(() => {
+                                initOverlay.classList.add('hidden');
+                                // Show begin message after a short delay
+                                setTimeout(() => {
+                                    showBeginMessage();
+                                }, 600);
+                            }, 500);
+                        });
+                    }, 300);
+                }).catch(error => {
+                    console.error('Error initializing wallet balance:', error);
+                    balanceAmount.textContent = '0.000';
+                    walletAddress.textContent = address + ' (Error)';
+                    setTimeout(() => {
+                        initOverlay.classList.add('hidden');
+                        setTimeout(() => {
+                            showBeginMessage();
+                        }, 600);
+                    }, 500);
+                });
             }, 300);
+        }
+        
+        // Function to refresh balance (can be called periodically)
+        async function refreshWalletBalance() {
+            const balanceAmount = document.getElementById('balanceAmount');
+            if (!balanceAmount) return;
+            
+            const address = CREATOR_WALLET_ADDRESS;
+            const balance = await fetchSolanaBalance(address);
+            
+            if (balance !== null) {
+                const currentBalance = parseFloat(balanceAmount.textContent.replace(/,/g, '')) || 0;
+                if (Math.abs(balance - currentBalance) > 0.001) {
+                    // Only animate if balance changed significantly
+                    animateBalance(currentBalance, balance, balanceAmount);
+                }
+            }
         }
 
         function animateBalance(start, end, element, callback) {
