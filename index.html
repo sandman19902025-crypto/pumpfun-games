@@ -2477,9 +2477,7 @@
                     </div>
                 </div>
                 <h2 class="wallet-label">Creator Wallet</h2>
-                <a href="https://solscan.io/account/DsCJ5siuJTPQtQa3A9N69azGZaWtUPzi9VPp2G9Jfpx9" target="_blank" style="text-decoration: none; color: inherit; display: block;">
-                    <div class="wallet-address code" id="walletAddress" style="cursor: pointer; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Loading address...</div>
-                </a>
+                <div class="wallet-address code" id="walletAddress">Loading address...</div>
                 <div class="balance-section">
                     <div class="balance-label">Balance</div>
                     <div class="balance-row">
@@ -2780,199 +2778,24 @@
             }
         }
 
-        // Creator wallet address
-        const CREATOR_WALLET_ADDRESS = 'DsCJ5siuJTPQtQa3A9N69azGZaWtUPzi9VPp2G9Jfpx9';
-        
-        // Fetch balance from Solana blockchain - multiple methods with better error handling
-        async function fetchSolanaBalance(address) {
-            console.log('Fetching balance for address:', address);
-            
-            // Method 1: Try direct RPC calls (some endpoints allow CORS)
-            const directRpcEndpoints = [
-                'https://api.mainnet-beta.solana.com',
-                'https://rpc.ankr.com/solana',
-                'https://solana-api.projectserum.com'
-            ];
-            
-            for (const endpoint of directRpcEndpoints) {
-                try {
-                    console.log('Trying direct RPC:', endpoint);
-                    const response = await fetch(endpoint, {
-                        method: 'POST',
-                        mode: 'cors',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            jsonrpc: '2.0',
-                            id: 1,
-                            method: 'getBalance',
-                            params: [address]
-                        })
-                    });
-                    
-                    if (response.ok) {
-                        const data = await response.json();
-                        if (data && data.result && typeof data.result.value === 'number') {
-                            const balanceInSOL = data.result.value / 1000000000;
-                            console.log('✓ Balance fetched from', endpoint + ':', balanceInSOL, 'SOL');
-                            return balanceInSOL;
-                        }
-                    } else {
-                        console.log('✗ RPC', endpoint, 'returned status:', response.status);
-                    }
-                } catch (error) {
-                    console.log('✗ Direct RPC', endpoint, 'failed:', error.message);
-                    // Check if it's a CORS error
-                    if (error.message.includes('CORS') || error.message.includes('Failed to fetch')) {
-                        console.log('  → CORS blocked, trying next method...');
-                    }
-                    continue;
-                }
-            }
-            
-            // Method 2: Use public Helius API (allows CORS, no key needed for balance)
-            try {
-                console.log('Trying Helius public API...');
-                // Helius has a public RPC endpoint that works
-                const heliusResponse = await fetch('https://mainnet.helius-rpc.com/?api-key=default', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        jsonrpc: '2.0',
-                        id: 1,
-                        method: 'getBalance',
-                        params: [address]
-                    })
-                });
-                
-                if (heliusResponse.ok) {
-                    const heliusData = await heliusResponse.json();
-                    if (heliusData && heliusData.result && typeof heliusData.result.value === 'number') {
-                        const balanceInSOL = heliusData.result.value / 1000000000;
-                        console.log('✓ Balance fetched from Helius:', balanceInSOL, 'SOL');
-                        return balanceInSOL;
-                    }
-                }
-            } catch (heliusError) {
-                console.log('✗ Helius failed:', heliusError.message);
-            }
-            
-            // Method 3: Try QuickNode public endpoint
-            try {
-                console.log('Trying QuickNode...');
-                const qnResponse = await fetch('https://api.mainnet-beta.solana.com', {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        jsonrpc: '2.0',
-                        id: 1,
-                        method: 'getBalance',
-                        params: [address]
-                    })
-                }).catch(() => null);
-                
-                if (qnResponse && qnResponse.ok) {
-                    const qnData = await qnResponse.json();
-                    if (qnData && qnData.result && typeof qnData.result.value === 'number') {
-                        const balanceInSOL = qnData.result.value / 1000000000;
-                        console.log('✓ Balance fetched from QuickNode:', balanceInSOL, 'SOL');
-                        return balanceInSOL;
-                    }
-                }
-            } catch (qnError) {
-                console.log('✗ QuickNode failed:', qnError.message);
-            }
-            
-            // Method 4: Use CORS proxy for Solscan (last resort)
-            try {
-                console.log('Trying Solscan via proxy...');
-                const corsProxy = 'https://api.allorigins.win/raw?url=';
-                const solscanUrl = `https://public-api.solscan.io/account/balance?address=${address}`;
-                
-                const proxyResponse = await fetch(corsProxy + encodeURIComponent(solscanUrl));
-                
-                if (proxyResponse.ok) {
-                    const proxyData = await proxyResponse.json();
-                    let balanceInLamports = 0;
-                    
-                    if (typeof proxyData === 'number') {
-                        balanceInLamports = proxyData;
-                    } else if (proxyData && proxyData.lamports !== undefined) {
-                        balanceInLamports = proxyData.lamports;
-                    } else if (proxyData && proxyData.balance !== undefined) {
-                        balanceInLamports = proxyData.balance;
-                    }
-                    
-                    const balanceInSOL = balanceInLamports / 1000000000;
-                    console.log('✓ Balance fetched from Solscan:', balanceInSOL, 'SOL');
-                    return balanceInSOL;
-                }
-            } catch (proxyError) {
-                console.log('✗ Solscan proxy failed:', proxyError.message);
-            }
-            
-            console.error('✗ All balance fetch methods failed');
-            return null;
-        }
-
-        // Wallet balance initialization with timeout protection
-        async function initializeWalletBalance() {
+        // Wallet balance initialization
+        function initializeWalletBalance() {
             const walletCard = document.getElementById('walletCard');
             const initOverlay = document.getElementById('initOverlay');
             const walletAddress = document.getElementById('walletAddress');
             const balanceAmount = document.getElementById('balanceAmount');
 
-            const address = CREATOR_WALLET_ADDRESS;
-            let balanceFetched = false;
-            
-            // Timeout after 10 seconds to prevent infinite loading (increased for better API success rate)
-            const timeoutId = setTimeout(() => {
-                if (!balanceFetched) {
-                    console.warn('Balance fetch timeout - proceeding with default');
-                    balanceAmount.textContent = '0.000';
-                    walletAddress.textContent = address;
-                    initOverlay.classList.add('hidden');
-                    setTimeout(() => {
-                        showBeginMessage();
-                    }, 600);
-                }
-            }, 10000);
+            // Example wallet address (you can replace with actual address)
+            const address = '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU';
+            const finalBalance = 42.567; // Example balance in SOL
 
             // Show initializing overlay
             setTimeout(() => {
                 // Update wallet address
                 walletAddress.textContent = address;
                 
-                // Fetch real balance from Solana RPC (with longer timeout to ensure it loads)
-                Promise.race([
-                    fetchSolanaBalance(address),
-                    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 9000))
-                ]).then(finalBalance => {
-                    balanceFetched = true;
-                    clearTimeout(timeoutId);
-                    
-                    if (finalBalance === null || finalBalance === undefined || isNaN(finalBalance)) {
-                        console.warn('Balance fetch returned invalid value, using 0.000');
-                        balanceAmount.textContent = '0.000';
-                        walletAddress.textContent = address;
-                        setTimeout(() => {
-                            initOverlay.classList.add('hidden');
-                            setTimeout(() => {
-                                showBeginMessage();
-                            }, 600);
-                        }, 300);
-                        return;
-                    }
-                    
-                    console.log('Balance fetched successfully:', finalBalance, 'SOL');
-                    
-                    // Start balance animation with real balance (quick animation)
+                // Start balance animation after a short delay
+                setTimeout(() => {
                     animateBalance(0, finalBalance, balanceAmount, () => {
                         // Hide initializing overlay when animation completes
                         setTimeout(() => {
@@ -2980,46 +2803,16 @@
                             // Show begin message after a short delay
                             setTimeout(() => {
                                 showBeginMessage();
-                            }, 400);
-                        }, 300);
+                            }, 600);
+                        }, 500);
                     });
-                }).catch(error => {
-                    balanceFetched = true;
-                    clearTimeout(timeoutId);
-                    console.error('Error initializing wallet balance:', error);
-                    balanceAmount.textContent = '0.000';
-                    walletAddress.textContent = address;
-                    setTimeout(() => {
-                        initOverlay.classList.add('hidden');
-                        setTimeout(() => {
-                            showBeginMessage();
-                        }, 400);
-                    }, 300);
-                });
+                }, 800);
             }, 300);
-        }
-        
-        // Function to refresh balance (can be called periodically)
-        async function refreshWalletBalance() {
-            const balanceAmount = document.getElementById('balanceAmount');
-            if (!balanceAmount) return;
-            
-            const address = CREATOR_WALLET_ADDRESS;
-            const balance = await fetchSolanaBalance(address);
-            
-            if (balance !== null) {
-                const currentBalance = parseFloat(balanceAmount.textContent.replace(/,/g, '')) || 0;
-                if (Math.abs(balance - currentBalance) > 0.001) {
-                    // Only animate if balance changed significantly
-                    animateBalance(currentBalance, balance, balanceAmount);
-                }
-            }
         }
 
         function animateBalance(start, end, element, callback) {
-            // Faster animation - 1 second instead of 2
-            const duration = 1000;
-            const steps = 30;
+            const duration = 2000; // 2 seconds
+            const steps = 60;
             const increment = (end - start) / steps;
             const stepDuration = duration / steps;
             let current = start;
