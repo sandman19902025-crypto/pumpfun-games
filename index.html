@@ -1773,8 +1773,9 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #66757f 0%, #99aab5 100%);
+            background: url('FORTAB.jpg') center center / cover no-repeat;
             flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .twitter-preview-user {
@@ -3431,7 +3432,7 @@
             const twitterPreviewContent = document.getElementById('twitterPreviewContent');
             if (!twitterPreviewContent) return;
             
-            const tweetText = `Join me on PumpFun Games! Share & earn SOL rewards - unlock the ultimate gaming experience! ${referralLink}`;
+            const tweetText = `Join me on PumpFun Games! Share & earn SOL rewards - unlock the ultimate gaming experience! ${referralLink} #PumpfunGames`;
             
             // Format the tweet with the link as a clickable element
             const formattedText = tweetText.replace(
@@ -3458,7 +3459,7 @@
             if (!referralLink) return;
             
             // Create Twitter share URL
-            const tweetText = encodeURIComponent(`Join me on PumpFun Games! Share & earn SOL rewards - unlock the ultimate gaming experience! ${referralLink}`);
+            const tweetText = encodeURIComponent(`Join me on PumpFun Games! Share & earn SOL rewards - unlock the ultimate gaming experience! ${referralLink} #PumpfunGames`);
             const twitterUrl = `https://twitter.com/intent/tweet?text=${tweetText}`;
             
             // Open Twitter in a new window
