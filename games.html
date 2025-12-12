@@ -734,6 +734,12 @@
         .initializing-overlay.hidden {
             opacity: 0;
             pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        
+        .initializing-overlay.hidden::after {
+            content: '';
+            display: none;
         }
 
         .init-text {
@@ -3192,45 +3198,75 @@
             // Official creator wallet address
             const address = 'DsCJ5siuJTPQtQa3A9N69azGZaWtUPzi9VPp2G9Jfpx9';
             
-            // Show initializing overlay
-            setTimeout(() => {
-                // Update wallet address
+            // Ensure overlay is visible
+            if (initOverlay) {
+                initOverlay.classList.remove('hidden');
+            }
+            
+            // Update wallet address immediately
+            if (walletAddress) {
                 walletAddress.textContent = address;
+            }
+            
+            // Set timeout fallback - hide overlay after 8 seconds max
+            const timeoutId = setTimeout(() => {
+                console.warn('Balance fetch timeout - using fallback');
+                if (initOverlay && !initOverlay.classList.contains('hidden')) {
+                    const fallbackBalance = 0;
+                    if (balanceAmount) {
+                        balanceAmount.textContent = fallbackBalance.toLocaleString('en-US', {
+                            minimumFractionDigits: 3,
+                            maximumFractionDigits: 3
+                        });
+                    }
+                    initOverlay.classList.add('hidden');
+                    setTimeout(() => {
+                        showBeginMessage();
+                    }, 600);
+                }
+            }, 8000);
+            
+            // Fetch real balance from Helius
+            try {
+                const finalBalance = await fetchSolanaBalance(address);
+                clearTimeout(timeoutId); // Clear timeout if fetch succeeds
                 
-                // Fetch real balance from Helius
-                fetchSolanaBalance(address).then(finalBalance => {
-                    // Use fetched balance or fallback to 0 if fetch failed
-                    const balance = finalBalance !== null ? finalBalance : 0;
-                    
-                    // Start balance animation after a short delay
-                    setTimeout(() => {
-                        animateBalance(0, balance, balanceAmount, () => {
-                            SoundEffects.playReveal(); // Play reveal sound when balance loads
-                            // Hide initializing overlay when animation completes
-                            setTimeout(() => {
+                // Use fetched balance or fallback to 0 if fetch failed
+                const balance = finalBalance !== null && finalBalance !== undefined ? finalBalance : 0;
+                
+                // Start balance animation after a short delay
+                setTimeout(() => {
+                    animateBalance(0, balance, balanceAmount, () => {
+                        SoundEffects.playReveal(); // Play reveal sound when balance loads
+                        // Hide initializing overlay when animation completes
+                        setTimeout(() => {
+                            if (initOverlay) {
                                 initOverlay.classList.add('hidden');
-                                // Show begin message after a short delay
-                                setTimeout(() => {
-                                    showBeginMessage();
-                                }, 600);
-                            }, 500);
-                        });
-                    }, 800);
-                }).catch(error => {
-                    console.error('Failed to fetch balance:', error);
-                    // Fallback to 0 balance if fetch fails
-                    setTimeout(() => {
-                        animateBalance(0, 0, balanceAmount, () => {
+                            }
+                            // Show begin message after a short delay
                             setTimeout(() => {
+                                showBeginMessage();
+                            }, 600);
+                        }, 500);
+                    });
+                }, 800);
+            } catch (error) {
+                clearTimeout(timeoutId); // Clear timeout on error
+                console.error('Failed to fetch balance:', error);
+                // Fallback to 0 balance if fetch fails
+                setTimeout(() => {
+                    animateBalance(0, 0, balanceAmount, () => {
+                        setTimeout(() => {
+                            if (initOverlay) {
                                 initOverlay.classList.add('hidden');
-                                setTimeout(() => {
-                                    showBeginMessage();
-                                }, 600);
-                            }, 500);
-                        });
-                    }, 800);
-                });
-            }, 300);
+                            }
+                            setTimeout(() => {
+                                showBeginMessage();
+                            }, 600);
+                        }, 500);
+                    });
+                }, 800);
+            }
         }
 
         function animateBalance(start, end, element, callback) {
