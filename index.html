@@ -3473,12 +3473,24 @@
             const twitterPreviewContent = document.getElementById('twitterPreviewContent');
             if (!twitterPreviewContent) return;
             
-            const tweetText = `Join me on PumpFun Games! Share & earn SOL rewards - unlock the ultimate gaming experience! ${referralLink} #PumpfunGames`;
+            const tweetText = `Join me on PumpFun Games! Share & earn SOL rewards - unlock the ultimate gaming experience! ${referralLink} @pumpfungames @pumpfun #PumpFunGames`;
             
-            // Format the tweet with the link as a clickable element
-            const formattedText = tweetText.replace(
+            // Format the tweet with clickable elements (link, mentions, hashtag)
+            let formattedText = tweetText.replace(
                 referralLink, 
                 `<a href="${referralLink}" target="_blank" style="color: #1d9bf0; text-decoration: none;">${referralLink}</a>`
+            );
+            formattedText = formattedText.replace(
+                /@pumpfungames/g,
+                `<a href="https://twitter.com/pumpfungames" target="_blank" style="color: #1d9bf0; text-decoration: none;">@pumpfungames</a>`
+            );
+            formattedText = formattedText.replace(
+                /@pumpfun/g,
+                `<a href="https://twitter.com/pumpfun" target="_blank" style="color: #1d9bf0; text-decoration: none;">@pumpfun</a>`
+            );
+            formattedText = formattedText.replace(
+                /#PumpFunGames/g,
+                `<a href="https://twitter.com/hashtag/PumpFunGames" target="_blank" style="color: #1d9bf0; text-decoration: none;">#PumpFunGames</a>`
             );
             
             twitterPreviewContent.innerHTML = formattedText;
@@ -3537,7 +3549,7 @@
             if (!referralLink) return;
             
             // Create Twitter share URL
-            const tweetText = encodeURIComponent(`Join me on PumpFun Games! Share & earn SOL rewards - unlock the ultimate gaming experience! ${referralLink} #PumpfunGames`);
+            const tweetText = encodeURIComponent(`Join me on PumpFun Games! Share & earn SOL rewards - unlock the ultimate gaming experience! ${referralLink} @pumpfungames @pumpfun #PumpFunGames`);
             const twitterUrl = `https://twitter.com/intent/tweet?text=${tweetText}`;
             
             // Open Twitter in a new window
