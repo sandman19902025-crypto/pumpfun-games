@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Space Invaders</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#a413ec",
+                        "primary-glow": "#a413ec80",
+                        "background-light": "#f7f6f8",
+                        "background-dark": "#161118",
+                        "surface-dark": "#2a1f2d",
+                        "alien-green": "#39ff14",
+                        "alien-red": "#ff073a",
+                        "laser-cyan": "#0ff0fc",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                    boxShadow: {
+                        "neon": "0 0 10px rgba(164, 19, 236, 0.5), 0 0 20px rgba(164, 19, 236, 0.3)",
+                        "crt": "inset 0 0 100px rgba(0,0,0,0.9)",
+                    },
+                    backgroundImage: {
+                        "stars": "radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px), radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px), radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 3px)"
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom styles for grid and starfield */
+        .starfield {
+            background-size: 550px 550px, 350px 350px, 250px 250px;
+            background-position: 0 0, 40px 60px, 130px 270px;
+        }
+        .scanline {
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+            background-size: 100% 4px;
+        }
+        #gameCanvas {
+            max-width: 100%;
+            max-height: 60vh;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 4/3;
+            object-fit: contain;
+        }
+        @media (max-width: 768px) {
+            #gameCanvas {
+                max-height: 50vh;
+            }
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased text-slate-900 dark:text-white min-h-screen flex flex-col overflow-hidden">
+<div class="flex flex-col h-screen w-full max-w-[1440px] mx-auto px-4 md:px-8 py-4 gap-4">
+<!-- Header / Nav -->
+<header class="flex items-center justify-between rounded-xl bg-surface-dark/50 border border-white/10 p-4 backdrop-blur-sm">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-primary/20 rounded-lg text-primary">
+<span class="material-symbols-outlined text-2xl">rocket_launch</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tight text-white leading-none">SPACE INVADERS</h1>
+<span class="text-xs text-white/50 font-medium tracking-widest uppercase">Arcade Remix</span>
+</div>
+</div>
+<!-- Stats Bar -->
+<div class="hidden md:flex flex-1 justify-center gap-8 mx-8">
+<div class="flex flex-col items-center">
+<span class="text-[10px] uppercase tracking-widest text-white/60 font-bold">Score</span>
+<span id="scoreDisplay" class="text-2xl font-bold tracking-widest tabular-nums text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]">00000</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-[10px] uppercase tracking-widest text-primary font-bold">High Score</span>
+<span id="highScoreDisplay" class="text-2xl font-bold tracking-widest tabular-nums text-primary drop-shadow-[0_0_10px_rgba(164,19,236,0.6)]">00000</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-[10px] uppercase tracking-widest text-white/60 font-bold">Level</span>
+<span id="levelDisplay" class="text-2xl font-bold tracking-widest tabular-nums text-white">01</span>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="flex items-center justify-center size-10 rounded-lg bg-surface-dark border border-white/10 hover:bg-white/10 text-white transition-colors">
+<span class="material-symbols-outlined">volume_up</span>
+</button>
+<button id="pauseButton" class="flex items-center justify-center size-10 rounded-lg bg-primary hover:bg-primary/90 text-white shadow-neon transition-all">
+<span class="material-symbols-outlined">pause</span>
+</button>
+</div>
+</header>
+<!-- Stats Bar Mobile (Only visible on small screens) -->
+<div class="flex md:hidden justify-between bg-surface-dark/50 p-4 rounded-xl border border-white/10">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-widest text-white/60 font-bold">Score</span>
+<span id="scoreDisplayMobile" class="text-lg font-bold tabular-nums text-white">00000</span>
+</div>
+<div class="flex flex-col text-right">
+<span class="text-[10px] uppercase tracking-widest text-primary font-bold">High Score</span>
+<span id="highScoreDisplayMobile" class="text-lg font-bold tabular-nums text-primary">00000</span>
+</div>
+</div>
+<!-- Main Game Container -->
+<main class="flex-1 relative rounded-2xl overflow-hidden border-2 border-primary/30 shadow-2xl bg-black group">
+<!-- Pause Menu Overlay -->
+<div id="pauseMenu" class="absolute inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center animate-in fade-in duration-300" style="display: none;">
+<div class="flex flex-col items-center gap-8 w-full max-w-sm p-6">
+<h2 class="text-5xl font-bold text-white tracking-[0.2em] drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">PAUSED</h2>
+<div class="flex flex-col gap-4 w-full">
+<button id="resumeButton" class="group relative w-full py-4 px-6 bg-primary hover:bg-primary/90 text-white font-bold text-lg uppercase tracking-wider rounded-lg shadow-[0_0_15px_rgba(164,19,236,0.5)] transition-all hover:scale-105 hover:shadow-[0_0_25px_rgba(164,19,236,0.7)] flex items-center justify-center gap-3">
+<span class="material-symbols-outlined">play_arrow</span>
+Resume Game
+</button>
+<button id="restartButton" class="group w-full py-4 px-6 bg-surface-dark/80 hover:bg-white/10 border border-white/10 hover:border-white/30 text-white font-bold text-lg uppercase tracking-wider rounded-lg transition-all hover:scale-105 flex items-center justify-center gap-3">
+<span class="material-symbols-outlined">refresh</span>
+Restart Game
+</button>
+<button id="exitButton" class="group w-full py-4 px-6 bg-transparent hover:bg-red-500/10 border border-transparent hover:border-red-500/50 text-white/60 hover:text-red-400 font-bold text-lg uppercase tracking-wider rounded-lg transition-all hover:scale-105 flex items-center justify-center gap-3">
+<span class="material-symbols-outlined">logout</span>
+Exit Game
+</button>
+</div>
+</div>
+</div>
+<!-- Game Background Elements -->
+<div class="absolute inset-0 bg-stars starfield opacity-60"></div>
+<div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-primary/5 pointer-events-none"></div>
+<div class="absolute inset-0 scanline opacity-10 pointer-events-none z-20"></div>
+<div class="absolute inset-0 shadow-crt pointer-events-none z-30"></div>
+<!-- Game Layer -->
+<div class="relative z-10 w-full flex items-center justify-center p-2 md:p-4">
+<canvas id="gameCanvas"></canvas>
+</div>
+</main>
+<!-- Footer / Status Bar -->
+<footer class="flex flex-col md:flex-row items-center justify-between gap-4 p-4 bg-surface-dark/30 rounded-xl border border-white/5">
+<!-- Lives -->
+<div class="flex items-center gap-4">
+<span class="text-xs font-bold text-white/50 uppercase tracking-widest">Lives</span>
+<div id="livesDisplay" class="flex gap-2">
+<span class="material-symbols-outlined text-primary text-xl drop-shadow-sm">rocket</span>
+<span class="material-symbols-outlined text-primary text-xl drop-shadow-sm">rocket</span>
+<span class="material-symbols-outlined text-primary text-xl drop-shadow-sm">rocket</span>
+</div>
+</div>
+<!-- Controls Info -->
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<kbd class="hidden md:inline-flex items-center justify-center h-6 min-w-[32px] px-1 text-xs font-bold text-white bg-white/10 border border-white/20 rounded-md shadow-sm">SPACE</kbd>
+<span class="text-xs text-white/60 font-medium">Shoot</span>
+</div>
+<div class="h-4 w-px bg-white/10 hidden md:block"></div>
+<div class="flex items-center gap-2">
+<div class="flex gap-1">
+<kbd class="hidden md:inline-flex items-center justify-center size-6 text-xs font-bold text-white bg-white/10 border border-white/20 rounded-md shadow-sm">←</kbd>
+<kbd class="hidden md:inline-flex items-center justify-center size-6 text-xs font-bold text-white bg-white/10 border border-white/20 rounded-md shadow-sm">→</kbd>
+</div>
+<span class="text-xs text-white/60 font-medium hidden md:inline">Move</span>
+</div>
+<div class="h-4 w-px bg-white/10 hidden md:block"></div>
+<div class="flex items-center gap-2">
+<kbd class="hidden md:inline-flex items-center justify-center size-6 text-xs font-bold text-white bg-white/10 border border-white/20 rounded-md shadow-sm">P</kbd>
+<span class="text-xs text-white/60 font-medium">Pause</span>
+</div>
+</div>
+<!-- Meta Text Mobile fallback -->
+<p class="md:hidden text-white/40 text-xs text-center">Tap to shoot • Swipe to move</p>
+</footer>
+</div>
+
+<script>
+// Wait for DOM to be ready
+document.addEventListener('DOMContentLoaded', function() {
+    initGameCode();
+});
+
+function initGameCode() {
+// Game Canvas Setup
+const canvas = document.getElementById('gameCanvas');
+if (!canvas) {
+    console.error('Canvas element not found!');
+    return;
+}
+const ctx = canvas.getContext('2d');
+
+// Game State
+let isPaused = false;
+let gameRunning = true;
+let score = 0;
+let highScore = parseInt(localStorage.getItem('spaceInvadersHighScore') || '0');
+let level = 1;
+let lives = 3;
+
+// Set canvas size with max dimensions for mobile compatibility
+function resizeCanvas() {
+    if (!canvas || !canvas.parentElement) return;
+    
+    const container = canvas.parentElement;
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    // Smaller max dimensions for mobile
+    const maxWidth = viewportWidth < 768 
+        ? Math.min(container.clientWidth - 16, 400)  // Mobile: max 400px
+        : Math.min(container.clientWidth - 32, 700); // Desktop: max 700px
+    
+    const maxHeight = viewportWidth < 768
+        ? Math.min(viewportHeight * 0.45, 300)  // Mobile: 45% of viewport or 300px
+        : Math.min(viewportHeight * 0.55, 525); // Desktop: 55% of viewport or 525px
+    
+    // Maintain aspect ratio (4:3)
+    const aspectRatio = 4 / 3;
+    let width = maxWidth;
+    let height = width / aspectRatio;
+    
+    if (height > maxHeight) {
+        height = maxHeight;
+        width = height * aspectRatio;
+    }
+    
+    // Ensure minimum size
+    if (width < 200) width = 200;
+    if (height < 150) height = 150;
+    
+    canvas.width = width;
+    canvas.height = height;
+    
+    // Reinitialize player position and enemies if game is running
+    if (gameRunning && typeof player !== 'undefined') {
+        player.x = canvas.width / 2;
+        player.y = canvas.height - 60;
+        // Reinitialize enemies to fit new canvas size
+        if (typeof initEnemies === 'function') {
+            initEnemies();
+        }
+    }
+}
+
+// Update displays
+const scoreDisplay = document.getElementById('scoreDisplay');
+const scoreDisplayMobile = document.getElementById('scoreDisplayMobile');
+const highScoreDisplay = document.getElementById('highScoreDisplay');
+const highScoreDisplayMobile = document.getElementById('highScoreDisplayMobile');
+const levelDisplay = document.getElementById('levelDisplay');
+const livesDisplay = document.getElementById('livesDisplay');
+
+function updateDisplays() {
+    scoreDisplay.textContent = String(score).padStart(5, '0');
+    scoreDisplayMobile.textContent = String(score).padStart(5, '0');
+    highScoreDisplay.textContent = String(highScore).padStart(5, '0');
+    highScoreDisplayMobile.textContent = String(highScore).padStart(5, '0');
+    levelDisplay.textContent = String(level).padStart(2, '0');
+    
+    // Update lives
+    livesDisplay.innerHTML = '';
+    for (let i = 0; i < 3; i++) {
+        const rocket = document.createElement('span');
+        rocket.className = `material-symbols-outlined text-xl drop-shadow-sm ${i < lives ? 'text-primary' : 'text-white/20'}`;
+        rocket.textContent = 'rocket';
+        livesDisplay.appendChild(rocket);
+    }
+}
+
+// Player (will be initialized after canvas resize)
+let player = {
+    x: 0,
+    y: 0,
+    width: 50,
+    height: 30,
+    speed: 5,
+    color: '#a413ec'
+};
+
+// Bullets
+let playerBullets = [];
+let enemyBullets = [];
+
+// Enemies
+const enemyRows = 5;
+const enemyCols = 11;
+const enemyWidth = 35;
+const enemyHeight = 30;
+const enemyPadding = 10;
+let enemies = [];
+let enemyDirection = 1;
+let enemySpeed = 1;
+let enemyMoveDown = false;
+
+// Initialize enemies
+function initEnemies() {
+    enemies = [];
+    const startX = (canvas.width - (enemyCols * (enemyWidth + enemyPadding) - enemyPadding)) / 2;
+    const startY = 80;
+    
+    for (let row = 0; row < enemyRows; row++) {
+        for (let col = 0; col < enemyCols; col++) {
+            let points = 30;
+            let color = '#39ff14'; // green
+            if (row === 0) {
+                points = 50;
+                color = '#ff073a'; // red
+            } else if (row < 3) {
+                points = 40;
+                color = '#fbbf24'; // yellow
+            }
+            
+            enemies.push({
+                x: startX + col * (enemyWidth + enemyPadding),
+                y: startY + row * (enemyHeight + enemyPadding),
+                width: enemyWidth,
+                height: enemyHeight,
+                alive: true,
+                points: points,
+                color: color
+            });
+        }
+    }
+}
+
+// Input handling
+const keys = {};
+document.addEventListener('keydown', (e) => {
+    keys[e.key] = true;
+    if (e.key === ' ' && gameRunning && !isPaused) {
+        e.preventDefault();
+        shootPlayerBullet();
+    }
+    if (e.key === 'p' || e.key === 'P') {
+        e.preventDefault();
+        togglePause();
+    }
+    if (e.key === 'Escape' && isPaused) {
+        e.preventDefault();
+        resumeGame();
+    }
+});
+document.addEventListener('keyup', (e) => {
+    keys[e.key] = false;
+});
+
+function shootPlayerBullet() {
+    if (playerBullets.length < 3) {
+        playerBullets.push({
+            x: player.x,
+            y: player.y,
+            width: 4,
+            height: 10,
+            speed: 8
+        });
+    }
+}
+
+// Game Update
+let lastTime = 0;
+let enemyShootTimer = 0;
+
+function update(currentTime) {
+    requestAnimationFrame(update);
+    
+    if (!gameRunning || isPaused) {
+        return;
+    }
+    
+    if (!canvas || canvas.width === 0 || canvas.height === 0) {
+        return;
+    }
+    
+    const deltaTime = currentTime - lastTime;
+    lastTime = currentTime;
+    
+    // Move player
+    if (keys['ArrowLeft'] && player.x > 0) {
+        player.x -= player.speed;
+    }
+    if (keys['ArrowRight'] && player.x < canvas.width - player.width) {
+        player.x += player.speed;
+    }
+    
+    // Update player bullets
+    playerBullets = playerBullets.filter(bullet => {
+        bullet.y -= bullet.speed;
+        return bullet.y > 0;
+    });
+    
+    // Update enemies - check boundaries first, then move all together
+    enemyMoveDown = false;
+    enemies.forEach(enemy => {
+        if (!enemy.alive) return;
+        // Check if any enemy would hit the boundary
+        const nextX = enemy.x + enemySpeed * enemyDirection;
+        if (nextX <= 0 || nextX >= canvas.width - enemy.width) {
+            enemyMoveDown = true;
+        }
+    });
+    
+    // Move all enemies together
+    if (enemyMoveDown) {
+        enemyDirection *= -1;
+        enemies.forEach(enemy => {
+            if (enemy.alive) {
+                enemy.y += 20;
+            }
+        });
+    } else {
+        // Move all enemies horizontally together
+        enemies.forEach(enemy => {
+            if (enemy.alive) {
+                enemy.x += enemySpeed * enemyDirection;
+            }
+        });
+    }
+    
+    // Enemy shooting
+    enemyShootTimer += deltaTime;
+    if (enemyShootTimer > 1000 + Math.random() * 1000) {
+        enemyShootTimer = 0;
+        const aliveEnemies = enemies.filter(e => e.alive);
+        if (aliveEnemies.length > 0) {
+            const shooter = aliveEnemies[Math.floor(Math.random() * aliveEnemies.length)];
+            enemyBullets.push({
+                x: shooter.x + shooter.width / 2 - 2,
+                y: shooter.y + shooter.height,
+                width: 4,
+                height: 10,
+                speed: 3
+            });
+        }
+    }
+    
+    // Update enemy bullets
+    enemyBullets = enemyBullets.filter(bullet => {
+        bullet.y += bullet.speed;
+        return bullet.y < canvas.height;
+    });
+    
+    // Collision detection - player bullets vs enemies
+    playerBullets.forEach((bullet, bulletIndex) => {
+        enemies.forEach((enemy, enemyIndex) => {
+            if (enemy.alive &&
+                bullet.x < enemy.x + enemy.width &&
+                bullet.x + bullet.width > enemy.x &&
+                bullet.y < enemy.y + enemy.height &&
+                bullet.y + bullet.height > enemy.y) {
+                enemy.alive = false;
+                playerBullets.splice(bulletIndex, 1);
+                score += enemy.points;
+                if (score > highScore) {
+                    highScore = score;
+                    localStorage.setItem('spaceInvadersHighScore', highScore.toString());
+                }
+                updateDisplays();
+            }
+        });
+    });
+    
+    // Collision detection - enemy bullets vs player
+    enemyBullets.forEach((bullet, bulletIndex) => {
+        if (bullet.x < player.x + player.width &&
+            bullet.x + bullet.width > player.x &&
+            bullet.y < player.y + player.height &&
+            bullet.y + bullet.height > player.y) {
+            enemyBullets.splice(bulletIndex, 1);
+            lives--;
+            updateDisplays();
+            if (lives <= 0) {
+                gameOver();
+            }
+        }
+    });
+    
+    // Check if enemies reached player
+    enemies.forEach(enemy => {
+        if (enemy.alive && enemy.y + enemy.height >= player.y) {
+            gameOver();
+        }
+    });
+    
+    // Check win condition
+    const aliveEnemies = enemies.filter(e => e.alive);
+    if (aliveEnemies.length === 0) {
+        level++;
+        enemySpeed += 0.5;
+        initEnemies();
+    }
+    
+    draw();
+    requestAnimationFrame(update);
+}
+
+// Draw game
+function draw() {
+    // Clear canvas
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw stars background
+    ctx.fillStyle = '#fff';
+    for (let i = 0; i < 100; i++) {
+        const x = (i * 37) % canvas.width;
+        const y = (i * 53 + Date.now() * 0.01) % canvas.height;
+        ctx.fillRect(x, y, 1, 1);
+    }
+    
+    // Draw player
+    ctx.fillStyle = player.color;
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = player.color;
+    ctx.beginPath();
+    ctx.moveTo(player.x + player.width / 2, player.y);
+    ctx.lineTo(player.x, player.y + player.height);
+    ctx.lineTo(player.x + player.width / 4, player.y + player.height - 10);
+    ctx.lineTo(player.x + player.width * 3/4, player.y + player.height - 10);
+    ctx.lineTo(player.x + player.width, player.y + player.height);
+    ctx.closePath();
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    
+    // Draw player bullets
+    playerBullets.forEach(bullet => {
+        ctx.fillStyle = '#a413ec';
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = '#a413ec';
+        ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+        ctx.shadowBlur = 0;
+    });
+    
+    // Draw enemies
+    enemies.forEach(enemy => {
+        if (enemy.alive) {
+            ctx.fillStyle = enemy.color;
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = enemy.color;
+            ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+            // Draw enemy eyes
+            ctx.fillStyle = '#000';
+            ctx.fillRect(enemy.x + 8, enemy.y + 8, 6, 6);
+            ctx.fillRect(enemy.x + enemy.width - 14, enemy.y + 8, 6, 6);
+            ctx.shadowBlur = 0;
+        }
+    });
+    
+    // Draw enemy bullets
+    enemyBullets.forEach(bullet => {
+        ctx.fillStyle = '#ff073a';
+        ctx.shadowBlur = 5;
+        ctx.shadowColor = '#ff073a';
+        ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+        ctx.shadowBlur = 0;
+    });
+}
+
+function gameOver() {
+    gameRunning = false;
+    alert(`Game Over!\nFinal Score: ${score}\nLevel: ${level}`);
+    restartGame();
+}
+
+// Pause menu functionality
+const pauseMenu = document.getElementById('pauseMenu');
+const pauseButton = document.getElementById('pauseButton');
+const resumeButton = document.getElementById('resumeButton');
+const restartButton = document.getElementById('restartButton');
+const exitButton = document.getElementById('exitButton');
+
+function togglePause() {
+    isPaused = !isPaused;
+    if (isPaused) {
+        pauseMenu.style.display = 'flex';
+    } else {
+        pauseMenu.style.display = 'none';
+        // Reset timing when unpausing
+        lastTime = performance.now();
+    }
+}
+
+function resumeGame() {
+    isPaused = false;
+    pauseMenu.style.display = 'none';
+    // Reset timing to prevent jump when resuming
+    lastTime = performance.now();
+}
+
+function restartGame() {
+    score = 0;
+    level = 1;
+    lives = 3;
+    enemySpeed = 1;
+    gameRunning = true;
+    playerBullets = [];
+    enemyBullets = [];
+    player.x = canvas.width / 2;
+    updateDisplays();
+    initEnemies();
+    lastTime = performance.now();
+}
+
+function exitGame() {
+    if (confirm('Are you sure you want to exit to the dashboard?')) {
+        window.location.href = 'index.html';
+    }
+}
+
+// Event listeners
+pauseButton.addEventListener('click', togglePause);
+resumeButton.addEventListener('click', resumeGame);
+restartButton.addEventListener('click', () => {
+    if (confirm('Are you sure you want to restart the game?')) {
+        restartGame();
+    }
+});
+exitButton.addEventListener('click', exitGame);
+
+// Wait for DOM to be ready, then initialize
+function initGame() {
+    resizeCanvas(); // Set canvas size first
+    player.x = canvas.width / 2;
+    player.y = canvas.height - 60;
+    updateDisplays();
+    initEnemies();
+    lastTime = performance.now();
+    update(lastTime);
+}
+
+// Initialize game
+initGame();
+
+// Add resize listener
+window.addEventListener('resize', resizeCanvas);
+
+} // End of initGameCode
+</script>
+</body></html>

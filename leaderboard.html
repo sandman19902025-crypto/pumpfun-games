@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Space Invaders Leaderboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#a413ec",
+                        "background-light": "#f7f6f8",
+                        "background-dark": "#1c1022",
+                        "surface-dark": "#2a1b32", // Slightly lighter than background-dark for cards/tables
+                        "surface-dark-hover": "#362440",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1c1022; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #362440; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a413ec; 
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display overflow-x-hidden min-h-screen flex flex-col">
+<div class="relative w-full bg-background-light dark:bg-background-dark border-b border-surface-dark-hover/50 z-20">
+<div class="layout-container flex justify-center w-full">
+<div class="flex items-center justify-between w-full max-w-[1280px] px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex items-center justify-center size-10 bg-primary/20 rounded-lg text-primary">
+<span class="material-symbols-outlined text-[24px]">rocket_launch</span>
+</div>
+<h2 class="text-xl font-bold tracking-tight uppercase">Space Invaders</h2>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-slate-500 dark:text-slate-400 hover:text-primary text-sm font-medium transition-colors" href="index.html">Home</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-primary text-sm font-medium transition-colors" href="space-invaders.html">Game</a>
+<a class="text-primary text-sm font-bold border-b-2 border-primary pb-0.5" href="#">Leaderboard</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-primary text-sm font-medium transition-colors" href="#">Settings</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="md:hidden text-slate-400 hover:text-white">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-10 border-2 border-surface-dark-hover" data-alt="User profile avatar showing a stylized astronaut helmet" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC6NzRFlUibJ6qijhtvP-GAmSI-2SKrGSVUb1H03RyVoJjt0CBGfnaWON8rkAlhWwurUcQw62nFATXPr8_ZLv_rEbyEvJk9LFNBZ9wFK0ALK3xLKPlVCfGWZ0Vo4dZenYoXNg4kCgXekmIr1Ts1V5wz6FsSXDooBR2WDlGQ945oKI4yq9sFv63ONkSfbWj3JLoPUd08UIFeAoVuVMZu_WfyaZjyi8BHd2CEEutVvMhjdhaE372hN_TuLXC79eS6PrAUVBnxksTB6isM");'>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-1 justify-center py-8 px-4 md:px-8">
+<div class="flex flex-col max-w-[960px] w-full gap-8">
+<div class="flex flex-col items-center gap-6">
+<div class="text-center">
+<div class="inline-flex items-center justify-center p-2 mb-4 rounded-full bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-xl">trophy</span>
+</div>
+<h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-2 uppercase text-transparent bg-clip-text bg-gradient-to-r from-white via-primary/50 to-white flex items-center justify-center gap-3">
+                        Galactic Leaderboard
+                        <span class="material-symbols-outlined text-4xl text-primary/80">public</span>
+</h1>
+<p class="text-slate-400 text-sm md:text-base">Top pilots ranked by highest score achieved.</p>
+<p class="text-primary/80 text-xs mt-2 uppercase tracking-wide font-medium">Highest scores based on the last 24 hours</p>
+</div>
+<div class="flex bg-surface-dark p-1 rounded-xl border border-surface-dark-hover/50">
+<label class="cursor-pointer">
+<input checked="" class="peer sr-only" name="period" type="radio" value="all-time"/>
+<div class="px-6 py-2 rounded-lg text-sm font-medium text-slate-400 transition-all peer-checked:bg-primary peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-primary/25 hover:text-white">
+                            All Time
+                        </div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" name="period" type="radio" value="weekly"/>
+<div class="px-6 py-2 rounded-lg text-sm font-medium text-slate-400 transition-all peer-checked:bg-primary peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-primary/25 hover:text-white">
+                            This Week
+                        </div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" name="period" type="radio" value="daily"/>
+<div class="px-6 py-2 rounded-lg text-sm font-medium text-slate-400 transition-all peer-checked:bg-primary peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-primary/25 hover:text-white">
+                            Today
+                        </div>
+</label>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end mb-4">
+<div class="order-2 md:order-1 flex flex-col items-center p-6 rounded-2xl bg-surface-dark border border-slate-700/50 hover:border-slate-500/50 transition-colors shadow-lg relative group overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-b from-slate-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="material-symbols-outlined text-slate-400 text-4xl mb-2">military_tech</span>
+<div class="size-16 rounded-full mb-3 border-2 border-slate-500 p-0.5 bg-background-dark">
+<div class="w-full h-full rounded-full bg-cover bg-center" data-alt="Avatar of Rank 2 player" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBnUk3uu0nWm63zD70ENlz__SbjmZDCrJ9t5so7efCEoACSHFD9_CBC_Qm_pehTvN9hjT2oBbbjznjMaeUyTHpBwWx8tFryHjMi0b-sbBVqxYRjel0yxyL7whHQz0dlAC5sBdDq5-yIbfohYyVgO3Z3cqB8ciP0Hbq1vSgcwmI-IJlbmfwDS9IPOxni63jwDnm70K9RFakq8hCH5IzlrTpeFU9eFUKtLuSzfqDuxrqoc-fs7Q2fi0U9MkHVjWBHCuedVFsbXsLhySb7');"></div>
+</div>
+<div class="text-slate-400 font-bold text-lg mb-1">#2</div>
+<div class="text-white font-bold text-xl truncate max-w-full">SpaceCadet</div>
+<div class="text-primary font-mono text-lg font-medium">88,400</div>
+</div>
+<div class="order-1 md:order-2 flex flex-col items-center p-8 rounded-2xl bg-surface-dark border-2 border-primary/50 shadow-[0_0_30px_rgba(164,19,236,0.15)] relative z-10 transform md:-translate-y-4 group overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-b from-primary/10 to-transparent"></div>
+<span class="material-symbols-outlined text-yellow-400 text-5xl mb-2 drop-shadow-[0_0_10px_rgba(250,204,21,0.5)]">emoji_events</span>
+<div class="size-24 rounded-full mb-4 border-2 border-yellow-400 p-1 bg-background-dark shadow-[0_0_15px_rgba(250,204,21,0.3)]">
+<div class="w-full h-full rounded-full bg-cover bg-center" data-alt="Avatar of Rank 1 player" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBhXlUvR4C_LIXBuTTtUYJCXmfSlxhvaJZ9o1kEh1Inb96dOtfqkl8VWes8voT9W_Vi0hvEPAm5qvjmcU641RNZ2H75ctxooUs7FJT-zC9HxJlEbO9qAnDI3hqBoMvs4m8YTUqreuA6ITKNKPDqH9MLNf87FrLtK0VZPlk03URvSr8wNVqZa8C7FmTc4bxAEIipSNRpaSi2KBss6DTYlKQtH6ckX27fqkxryC11Ym-UOYNuhq4h897kX34IDNY4JeOcTFf5PYZMDsom');"></div>
+</div>
+<div class="text-yellow-400 font-bold text-xl mb-1 drop-shadow-sm">#1</div>
+<div class="text-white font-bold text-2xl truncate max-w-full">StarLord</div>
+<div class="text-primary font-mono text-xl font-bold">99,999</div>
+<div class="absolute top-4 right-4 text-xs font-bold px-2 py-1 rounded bg-primary text-white">NEW</div>
+</div>
+<div class="order-3 flex flex-col items-center p-6 rounded-2xl bg-surface-dark border border-orange-700/30 hover:border-orange-600/50 transition-colors shadow-lg relative group overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-b from-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="material-symbols-outlined text-orange-400 text-4xl mb-2">military_tech</span>
+<div class="size-16 rounded-full mb-3 border-2 border-orange-700 p-0.5 bg-background-dark">
+<div class="w-full h-full rounded-full bg-cover bg-center" data-alt="Avatar of Rank 3 player" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDf2vM3iT2sGgo5ZYQjmokvoIgN7MLrjAJ6LzqHNeso1y-HMv9MjAcMXXEXZyA6yIRUqv3wdGDmeJH8mj3gHRxndu7UDGIJimdxO9_LKWheDl1pS8WvanolohSIzHL_n2v-fi-u7ikL-QkeqWFgwrYrSdDhlg8F0lYHokqPy3jOty8HQBMrV2LYB13-LeJhAb5aIk5JYq6CwzoqginlM_n2Z7I05mEFX-_vjdpWWeUTexMQ_GYs6B2mUlwyu4WjSgdL5BHgqRrmYqMA');"></div>
+</div>
+<div class="text-orange-400 font-bold text-lg mb-1">#3</div>
+<div class="text-white font-bold text-xl truncate max-w-full">AlienHunter</div>
+<div class="text-primary font-mono text-lg font-medium">76,200</div>
+</div>
+</div>
+<div class="@container">
+<div class="overflow-hidden rounded-xl border border-surface-dark-hover bg-surface-dark shadow-xl">
+<table class="w-full border-collapse">
+<thead>
+<tr class="bg-surface-dark-hover/50 text-left border-b border-surface-dark-hover">
+<th class="py-4 px-6 text-slate-400 font-medium text-sm w-[100px]">Rank</th>
+<th class="py-4 px-6 text-slate-400 font-medium text-sm">Pilot</th>
+<th class="py-4 px-6 text-slate-400 font-medium text-sm text-right">Score</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-dark-hover">
+<tr class="group hover:bg-surface-dark-hover/30 transition-colors">
+<td class="py-4 px-6 text-slate-400 font-medium">4</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-slate-700 bg-cover bg-center hidden xs:block" data-alt="Generic user avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuByNKFrHvmBAouf_VvPCOnIofGnj7DvFdptBgw-I6LEr4RZH8FazA-sEdTxH3K5vBwRjF3VSYkx6DTVCMH5ZyLW3JO4qi6pel4Pza73S6pyo3VHoY4brFiIIQjN0kWS12sNkDgo92jdkQP9qh6XaUoAatTht4DyeS4EeC4jtr68rngEJOapiPAEdqsa2fqf669jJw3yrx3036enl1MHyWLNrygukvrfrA-sNzoSrBtla1guJA5qS5hSzAWb7MNB-K1L-QvBh9BAhyO3');"></div>
+<span class="text-white font-medium group-hover:text-primary transition-colors">NebulaDrifter</span>
+</div>
+</td>
+<td class="py-4 px-6 text-right font-mono text-white text-lg">65,430</td>
+</tr>
+<tr class="group hover:bg-surface-dark-hover/30 transition-colors">
+<td class="py-4 px-6 text-slate-400 font-medium">5</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-slate-700 bg-cover bg-center hidden xs:block" data-alt="Generic user avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCDiscRE8VIf7ONOVxyNMdABFtpp08lNZsPfj9z76es0LWQOMPA_V4KtYsVFy7pI36zydkHfMGGItBSuJdALZY6wFd0crWwfOoqj0Boy7HM2pr1iLXPKnQD8aXGUhg2ktuTDqbbZPSfTrE_Z_9ckQR_tIT6W50JcW5Nu56jKlvR1_HueY6LJw_kipryc2GGy5JGhWNx8C6_nhm0n4BNeHD8Mt-wdYsN_GCXWf_Rj_M6Q_BOm5-xkAozr8lDEFkb8OrLbqjp1s-JZiP6');"></div>
+<span class="text-white font-medium group-hover:text-primary transition-colors">RetroRocket</span>
+</div>
+</td>
+<td class="py-4 px-6 text-right font-mono text-white text-lg">59,200</td>
+</tr>
+<tr class="group hover:bg-surface-dark-hover/30 transition-colors">
+<td class="py-4 px-6 text-slate-400 font-medium">6</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-slate-700 bg-cover bg-center hidden xs:block" data-alt="Generic user avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCLfvsDkldfNEqGFMBeFmTyx2Kya1gRvume7K036JF76wZ3rYpwoEzx3NTaymr74mq2QmR_SCtgEhRXh3apxAXLrkzKmwF1IJY59Fh5qajy9QY0xONcPW76cRtIVkz3tSdnkLtjdJx4Ol5qilo0xEXRG_d3IuFzgeDW4gdM5OE_ywp0YHqBKv5sqm9NzOeTSd6oJDQ1e07T0N4Wp14Eq99Ynix-EZhWTAEI7VHXG6AGMKyI9BcWNSIYrpEraP7lJmmAqT7vbzHuwXpu');"></div>
+<span class="text-white font-medium group-hover:text-primary transition-colors">LaserBeam</span>
+</div>
+</td>
+<td class="py-4 px-6 text-right font-mono text-white text-lg">54,100</td>
+</tr>
+<tr class="group hover:bg-surface-dark-hover/30 transition-colors">
+<td class="py-4 px-6 text-slate-400 font-medium">7</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-slate-700 bg-cover bg-center hidden xs:block" data-alt="Generic user avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDLdzZmG6tsq_r5O6NXRlCKK8uFhXGpgNWQVWFg8y7Mcun5GuaM5k8E7QoXsrLSXPpmTxxw8kE0NZCh-RnMteK6G8mRg5aD4NL8ZCMGUl6KrxeOlm23F3SHKT6t3xGAW1rqpMtrw-ofs1t6B6mXyZR3WAYCjqg7wDxet4uD0KLengxVoRIsnjvWmmEDcXLUq8BGfiGX29A-tEOHrNoY1X0mJGMIKe0_bWaD2qiuZdYMU47qwJd_8DBryWYctJG5tHYcchQlc0U9Vjme');"></div>
+<span class="text-white font-medium group-hover:text-primary transition-colors">PixelPilot</span>
+</div>
+</td>
+<td class="py-4 px-6 text-right font-mono text-white text-lg">50,050</td>
+</tr>
+<tr class="group hover:bg-surface-dark-hover/30 transition-colors">
+<td class="py-4 px-6 text-slate-400 font-medium">8</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-slate-700 bg-cover bg-center hidden xs:block" data-alt="Generic user avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBv_vLDIIfSuYo13ZwkzrTNGNPb4gM_lg9jJHcVW31GCn4iT71HUecj5-KviWfqNKd_8D-0NaYTcMtG2iXjgvxoy2RnSLDg9VOpOCpiNYo-54KIUxFlnZir7dnLmrhT6577DxXQNsRXQxky888ZWiQw-FulZr4O8pex0S7watnbUc2NNqGsRQvOm10uVSVp1Md1DLy-Z7YcwYRzhZx1JITNtc2K3Cq27TOyCzoDnDnAsw2xggxfs78LFMmHMxaHnjoypdsZLLqv6j7k');"></div>
+<span class="text-white font-medium group-hover:text-primary transition-colors">CosmicRay</span>
+</div>
+</td>
+<td class="py-4 px-6 text-right font-mono text-white text-lg">48,900</td>
+</tr>
+<tr class="group hover:bg-surface-dark-hover/30 transition-colors">
+<td class="py-4 px-6 text-slate-400 font-medium">9</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-slate-700 bg-cover bg-center hidden xs:block" data-alt="Generic user avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDvexKtw2bnS7AJzuOdubewcL24h9UTQnyh_cR_lcystwEIJFOf5scMpchh9PDiqEk7kVRIbui4yuZ891LypoBCeorgnAuds1avakKtAngrduGDY9MeMaoU3JkC_-UFki4sgb6FbFFtSWqErQtM6Aoka3Xv-QV50atihEksmU_7uu_WY9I6_SdxJvdRz7t2uA9Yi_cvb8ZsNOEiEms9w9Jij9g9qIRb4uwUTcBx3fXb3l0qmH8_Ur6E4WYVoD-dtI5P9F9g7tb0sUA2');"></div>
+<span class="text-white font-medium group-hover:text-primary transition-colors">InvaderZim</span>
+</div>
+</td>
+<td class="py-4 px-6 text-right font-mono text-white text-lg">45,300</td>
+</tr>
+<tr class="group hover:bg-surface-dark-hover/30 transition-colors border-none">
+<td class="py-4 px-6 text-slate-400 font-medium">10</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-slate-700 bg-cover bg-center hidden xs:block" data-alt="Generic user avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuANzZqr9v6Qp13wjffI3PS4xQmNDrGr3ja-tRuMJ-K_roRZIUKgrNMO5YdjIPCsX7IfwmRu3YoeWKwMtZpb1S_yb5yRLKJOrXL6ab6d24HrHZ9yAAfUhR0phsN2Z2q5uACLcMAVS8hiiXPplukTG8TjDZ-b_rTEHr8Nvgu6WtNkw_X_jamYg97U_at05eg_hV6z99vH50sPC9vy9KwKv_iAkQYhXlHMGkAcgVUEtSQyXYUIVSeMWxWT_f56ufjHTivJTrqgzyuZ71C8');"></div>
+<span class="text-white font-medium group-hover:text-primary transition-colors">MarsRover</span>
+</div>
+</td>
+<td class="py-4 px-6 text-right font-mono text-white text-lg">42,100</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 pt-4 pb-12 justify-center">
+<button onclick="window.location.href='space-invaders.html'" class="flex items-center justify-center gap-2 h-12 px-8 rounded-full bg-primary hover:bg-primary/90 text-white font-bold text-lg transition-all shadow-[0_0_15px_rgba(164,19,236,0.3)] hover:shadow-[0_0_25px_rgba(164,19,236,0.5)] active:scale-95">
+<span class="material-symbols-outlined">replay</span>
+                    Play Again
+                </button>
+<button onclick="window.location.href='index.html'" class="flex items-center justify-center gap-2 h-12 px-8 rounded-full border-2 border-slate-600 hover:border-white text-slate-300 hover:text-white font-bold text-lg transition-all bg-transparent active:scale-95">
+<span class="material-symbols-outlined">home</span>
+                    Main Menu
+                </button>
+</div>
+</div>
+</div>
+</body></html>
+
