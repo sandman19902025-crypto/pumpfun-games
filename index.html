@@ -1618,6 +1618,7 @@
         .dashboard-card:nth-child(1) { animation-delay: 0.3s; }
         .dashboard-card:nth-child(2) { animation-delay: 0.5s; }
         .dashboard-card:nth-child(3) { animation-delay: 0.7s; }
+        .dashboard-card:nth-child(4) { animation-delay: 0.9s; }
 
         @keyframes cardSlideIn {
             to {
@@ -1646,6 +1647,93 @@
             color: var(--fg);
             margin-bottom: calc(var(--space) * 0.5);
             text-align: center;
+        }
+
+        /* Referral Program Styles */
+        .referral-subtitle {
+            font-size: clamp(12px, 3.5vw, 14px);
+            color: var(--accent);
+            text-align: center;
+            margin-bottom: calc(var(--space) * 1.5);
+            font-weight: 500;
+        }
+
+        .referral-form {
+            display: flex;
+            flex-direction: column;
+            gap: calc(var(--space) * 1.5);
+        }
+
+        .referral-input {
+            padding: 12px calc(var(--space) * 1.5);
+            background: #0e1420;
+            border: 1px solid var(--accent);
+            color: var(--fg);
+            font-family: inherit;
+            font-size: clamp(14px, 4vw, 16px);
+            border-radius: calc(var(--radius) - 4px);
+            box-shadow: var(--shadow);
+            transition: all 0.2s ease;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .referral-input:focus {
+            outline: none;
+            border-color: var(--accent2);
+            box-shadow: 0 0 0 2px rgba(255, 0, 255, 0.2);
+        }
+
+        .referral-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .referral-link-container {
+            display: flex;
+            flex-direction: column;
+            gap: calc(var(--space) * 1);
+            margin-top: calc(var(--space) * 0.5);
+        }
+
+        .referral-link-label {
+            font-size: clamp(12px, 3.5vw, 14px);
+            color: var(--fg);
+            opacity: 0.8;
+        }
+
+        .referral-link-display {
+            padding: 10px calc(var(--space) * 1.5);
+            background: rgba(0, 255, 168, 0.1);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            font-family: 'Courier New', monospace;
+            font-size: clamp(12px, 3.5vw, 14px);
+            border-radius: calc(var(--radius) - 4px);
+            word-break: break-all;
+            text-align: center;
+        }
+
+        .referral-share-button {
+            padding: 12px calc(var(--space) * 1.5);
+            background: #1DA1F2;
+            border: 1px solid #1DA1F2;
+            color: white;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: clamp(14px, 4vw, 16px);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.2s ease;
+            border-radius: calc(var(--radius) - 4px);
+            box-shadow: var(--shadow);
+            font-weight: 600;
+        }
+
+        .referral-share-button:hover {
+            background: #0d8bd9;
+            border-color: #0d8bd9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(29, 161, 242, 0.4);
         }
 
         .rewards-status span {
@@ -2623,6 +2711,28 @@
                         <div class="games-empty">None so far</div>
                     </div>
                 </div>
+                <div class="dashboard-card card purple">
+                    <h3 class="card-title">Referral Program</h3>
+                    <div class="card-content">
+                        <div class="referral-subtitle">Chance to win free Solana</div>
+                        <div class="referral-form">
+                            <input 
+                                type="text" 
+                                id="referralXName" 
+                                class="referral-input" 
+                                placeholder="Enter X Name"
+                                maxlength="50"
+                            />
+                            <div class="referral-link-container" id="referralLinkContainer" style="display: none;">
+                                <div class="referral-link-label">Your Referral Link:</div>
+                                <div class="referral-link-display" id="referralLinkDisplay"></div>
+                                <button class="referral-share-button" id="referralShareButton" onclick="shareReferralLink()">
+                                    Share on X
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <!-- Contract Address Section -->
@@ -3071,16 +3181,11 @@
                 document.getElementById('walletTitleBalance').textContent = balance;
             }
             
-            // Set rewards amount (you can customize this - for now using a portion of balance)
+            // Set rewards amount to 0
             const balanceAmountEl = document.getElementById('balanceAmount');
             if (balanceAmountEl) {
-                const balance = parseFloat(balanceAmountEl.textContent.replace(/,/g, ''));
-                // Example: rewards are 10% of balance (you can change this logic)
-                const rewards = (balance * 0.1).toFixed(3);
-                document.getElementById('rewardsAmount').textContent = parseFloat(rewards).toLocaleString('en-US', {
-                    minimumFractionDigits: 3,
-                    maximumFractionDigits: 3
-                });
+                // Set rewards distributed to 0
+                document.getElementById('rewardsAmount').textContent = '0.000';
             }
             
             // Play background music
@@ -3201,6 +3306,77 @@
             
             document.body.removeChild(textArea);
         }
+
+        // Referral Link Functions
+        function generateReferralLink(xName) {
+            // Sanitize X name - remove @ if present, remove spaces, convert to lowercase
+            const sanitized = xName.trim().replace(/^@/, '').replace(/\s+/g, '').toLowerCase();
+            if (!sanitized) return null;
+            
+            // Generate referral link
+            const baseUrl = window.location.origin || 'https://pumpfun.games';
+            return `${baseUrl}/ref-${sanitized}`;
+        }
+
+        function shareReferralLink() {
+            const xNameInput = document.getElementById('referralXName');
+            const referralLinkDisplay = document.getElementById('referralLinkDisplay');
+            
+            if (!xNameInput || !referralLinkDisplay) return;
+            
+            const xName = xNameInput.value.trim();
+            if (!xName) {
+                alert('Please enter your X name first');
+                return;
+            }
+            
+            const referralLink = referralLinkDisplay.textContent.trim();
+            if (!referralLink) return;
+            
+            // Create Twitter share URL
+            const tweetText = encodeURIComponent(`🎮 Join me on PumpFun Games and get a chance to win free Solana! Use my referral link: ${referralLink}`);
+            const twitterUrl = `https://twitter.com/intent/tweet?text=${tweetText}`;
+            
+            // Open Twitter in a new window
+            window.open(twitterUrl, '_blank', 'width=550,height=420');
+        }
+
+        // Initialize referral input handler
+        document.addEventListener('DOMContentLoaded', function() {
+            const referralXNameInput = document.getElementById('referralXName');
+            const referralLinkContainer = document.getElementById('referralLinkContainer');
+            const referralLinkDisplay = document.getElementById('referralLinkDisplay');
+            
+            if (referralXNameInput && referralLinkContainer && referralLinkDisplay) {
+                // Handle input changes
+                referralXNameInput.addEventListener('input', function() {
+                    const xName = this.value.trim();
+                    
+                    if (xName) {
+                        const referralLink = generateReferralLink(xName);
+                        if (referralLink) {
+                            referralLinkDisplay.textContent = referralLink;
+                            referralLinkContainer.style.display = 'flex';
+                        } else {
+                            referralLinkContainer.style.display = 'none';
+                        }
+                    } else {
+                        referralLinkContainer.style.display = 'none';
+                    }
+                });
+                
+                // Handle Enter key
+                referralXNameInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const xName = this.value.trim();
+                        if (xName && referralLinkContainer.style.display !== 'none') {
+                            shareReferralLink();
+                        }
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>
