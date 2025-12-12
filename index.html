@@ -2778,8 +2778,73 @@
             }
         }
 
+        // Fetch balance from Solana using Helius RPC
+        async function fetchSolanaBalance(address) {
+            const HELIUS_API_KEY = 'e7f8cbe0-8718-46c2-9423-013252d80521';
+            const HELIUS_RPC_URL = `https://mainnet.helius-rpc.com/?api-key=${HELIUS_API_KEY}`;
+            
+            try {
+                const response = await fetch(HELIUS_RPC_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        jsonrpc: '2.0',
+                        id: 1,
+                        method: 'getBalance',
+                        params: [
+                            address,
+                            {
+                                commitment: 'finalized'
+                            }
+                        ]
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                if (data.error) {
+                    console.error('RPC Error:', data.error);
+                    throw new Error(data.error.message || 'Failed to fetch balance');
+                }
+
+                // Convert lamports to SOL (1 SOL = 1,000,000,000 lamports)
+                const balanceInSOL = data.result.value / 1e9;
+                return balanceInSOL;
+            } catch (error) {
+                console.error('Error fetching balance:', error);
+                // Fallback: try direct Solana RPC
+                try {
+                    const fallbackResponse = await fetch('https://api.mainnet-beta.solana.com', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            jsonrpc: '2.0',
+                            id: 1,
+                            method: 'getBalance',
+                            params: [address, { commitment: 'finalized' }]
+                        })
+                    });
+                    const fallbackData = await fallbackResponse.json();
+                    if (fallbackData.result) {
+                        return fallbackData.result.value / 1e9;
+                    }
+                } catch (fallbackError) {
+                    console.error('Fallback RPC also failed:', fallbackError);
+                }
+                return 0; // Return 0 if all methods fail
+            }
+        }
+
         // Wallet balance initialization
-        function initializeWalletBalance() {
+        async function initializeWalletBalance() {
             const walletCard = document.getElementById('walletCard');
             const initOverlay = document.getElementById('initOverlay');
             const walletAddress = document.getElementById('walletAddress');
@@ -2793,19 +2858,32 @@
                 // Update wallet address
                 walletAddress.textContent = address;
                 
-                // Start balance animation after a short delay
-                setTimeout(() => {
-                    animateBalance(0, finalBalance, balanceAmount, () => {
-                        // Hide initializing overlay when animation completes
-                        setTimeout(() => {
-                            initOverlay.classList.add('hidden');
-                            // Show begin message after a short delay
+                // Fetch real balance from Helius
+                fetchSolanaBalance(address).then(finalBalance => {
+                    // Start balance animation after fetching
+                    setTimeout(() => {
+                        animateBalance(0, finalBalance, balanceAmount, () => {
+                            // Hide initializing overlay when animation completes
                             setTimeout(() => {
-                                showBeginMessage();
-                            }, 600);
-                        }, 500);
-                    });
-                }, 800);
+                                initOverlay.classList.add('hidden');
+                                // Show begin message after a short delay
+                                setTimeout(() => {
+                                    showBeginMessage();
+                                }, 600);
+                            }, 500);
+                        });
+                    }, 800);
+                }).catch(error => {
+                    console.error('Failed to fetch balance:', error);
+                    // Show 0.000 if fetch fails
+                    balanceAmount.textContent = '0.000';
+                    setTimeout(() => {
+                        initOverlay.classList.add('hidden');
+                        setTimeout(() => {
+                            showBeginMessage();
+                        }, 600);
+                    }, 500);
+                });
             }, 300);
         }
 
