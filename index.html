@@ -1700,7 +1700,14 @@
             opacity: 0.8;
         }
 
+        .referral-link-wrapper {
+            display: flex;
+            gap: calc(var(--space) * 0.75);
+            align-items: stretch;
+        }
+
         .referral-link-display {
+            flex: 1;
             padding: 10px calc(var(--space) * 1.5);
             background: rgba(0, 255, 168, 0.1);
             border: 1px solid var(--accent);
@@ -1710,6 +1717,37 @@
             border-radius: calc(var(--radius) - 4px);
             word-break: break-all;
             text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .referral-copy-button {
+            padding: 10px calc(var(--space) * 1.5);
+            background: #0e1420;
+            border: 1px solid var(--accent);
+            color: var(--fg);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: clamp(12px, 3.5vw, 14px);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            border-radius: calc(var(--radius) - 4px);
+            box-shadow: var(--shadow);
+        }
+
+        .referral-copy-button:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .referral-copy-button.copied {
+            border-color: var(--accent);
+            background: rgba(0, 255, 168, 0.2);
+            color: var(--accent);
         }
 
         .referral-share-button {
@@ -2838,7 +2876,10 @@
                         />
                         <div class="referral-link-container" id="referralLinkContainer" style="display: none;">
                             <div class="referral-link-label">Your Referral Link:</div>
-                            <div class="referral-link-display" id="referralLinkDisplay"></div>
+                            <div class="referral-link-wrapper">
+                                <div class="referral-link-display" id="referralLinkDisplay"></div>
+                                <button class="referral-copy-button" id="referralCopyButton" onclick="copyReferralLink()">Copy</button>
+                            </div>
                             
                             <!-- Twitter Post Preview -->
                             <div class="twitter-preview-container">
@@ -3441,6 +3482,43 @@
             );
             
             twitterPreviewContent.innerHTML = formattedText;
+        }
+
+        function copyReferralLink() {
+            const referralLinkDisplay = document.getElementById('referralLinkDisplay');
+            const copyButton = document.getElementById('referralCopyButton');
+            
+            if (!referralLinkDisplay || !copyButton) return;
+            
+            // Get the text content
+            let referralLink = referralLinkDisplay.textContent || referralLinkDisplay.innerText;
+            referralLink = referralLink.trim();
+            
+            if (!referralLink) {
+                alert('No referral link available');
+                return;
+            }
+            
+            // Copy to clipboard
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(referralLink).then(() => {
+                    // Show feedback
+                    const originalText = copyButton.textContent;
+                    copyButton.textContent = 'Copied!';
+                    copyButton.classList.add('copied');
+                    
+                    setTimeout(() => {
+                        copyButton.textContent = originalText;
+                        copyButton.classList.remove('copied');
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                    fallbackCopy(referralLink, copyButton);
+                });
+            } else {
+                // Fallback for older browsers
+                fallbackCopy(referralLink, copyButton);
+            }
         }
 
         function shareReferralLink() {
