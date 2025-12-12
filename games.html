@@ -3870,11 +3870,17 @@
                 return;
             }
             
-            // Remove @ if user included it
-            const cleanHandle = xHandle.replace(/^@/, '');
+            // Remove @ if user included it, and clean the handle (only alphanumeric and underscore)
+            const cleanHandle = xHandle.replace(/^@/, '').replace(/[^a-zA-Z0-9_]/g, '').toLowerCase();
             
-            // Generate link to their X/Twitter profile
-            const referralLink = `https://x.com/${cleanHandle}`;
+            if (!cleanHandle) {
+                alert('Please enter a valid X handle');
+                return;
+            }
+            
+            // Generate referral link in format: pumpfun.games/referral-xaccountname
+            const baseUrl = window.location.origin;
+            const referralLink = `${baseUrl}/referral-${cleanHandle}`;
             
             // Display the link
             document.getElementById('referralLinkAddress').textContent = referralLink;
