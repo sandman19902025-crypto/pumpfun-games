@@ -3228,54 +3228,112 @@
             
             // Fetch real balance from Helius
             try {
+                console.log('Fetching balance for address:', address);
                 const finalBalance = await fetchSolanaBalance(address);
                 clearTimeout(timeoutId); // Clear timeout if fetch succeeds
+                
+                console.log('Balance fetched:', finalBalance);
                 
                 // Use fetched balance or fallback to 0 if fetch failed
                 const balance = finalBalance !== null && finalBalance !== undefined ? finalBalance : 0;
                 
+                console.log('Balance to display:', balance);
+                console.log('Balance element:', balanceAmount);
+                
+                // Ensure balanceAmount element exists
+                if (!balanceAmount) {
+                    console.error('balanceAmount element not found!');
+                    // Try to find it again
+                    const balanceAmountRetry = document.getElementById('balanceAmount');
+                    if (balanceAmountRetry) {
+                        console.log('Found balanceAmount on retry');
+                    }
+                }
+                
                 // Start balance animation after a short delay
                 setTimeout(() => {
-                    animateBalance(0, balance, balanceAmount, () => {
-                        SoundEffects.playReveal(); // Play reveal sound when balance loads
-                        // Hide initializing overlay when animation completes
-                        setTimeout(() => {
-                            if (initOverlay) {
-                                initOverlay.classList.add('hidden');
-                            }
-                            // Show begin message after a short delay
+                    if (balanceAmount) {
+                        console.log('Starting balance animation from 0 to', balance);
+                        animateBalance(0, balance, balanceAmount, () => {
+                            console.log('Balance animation complete');
+                            SoundEffects.playReveal(); // Play reveal sound when balance loads
+                            // Hide initializing overlay when animation completes
                             setTimeout(() => {
-                                showBeginMessage();
-                            }, 600);
-                        }, 500);
-                    });
+                                if (initOverlay) {
+                                    initOverlay.classList.add('hidden');
+                                }
+                                // Show begin message after a short delay
+                                setTimeout(() => {
+                                    showBeginMessage();
+                                }, 600);
+                            }, 500);
+                        });
+                    } else {
+                        console.error('Cannot animate balance - element not found');
+                        // Directly set balance if element exists but animation fails
+                        const balanceElement = document.getElementById('balanceAmount');
+                        if (balanceElement) {
+                            balanceElement.textContent = balance.toLocaleString('en-US', {
+                                minimumFractionDigits: 3,
+                                maximumFractionDigits: 3
+                            });
+                        }
+                        if (initOverlay) {
+                            initOverlay.classList.add('hidden');
+                        }
+                        setTimeout(() => {
+                            showBeginMessage();
+                        }, 600);
+                    }
                 }, 800);
             } catch (error) {
                 clearTimeout(timeoutId); // Clear timeout on error
                 console.error('Failed to fetch balance:', error);
                 // Fallback to 0 balance if fetch fails
                 setTimeout(() => {
-                    animateBalance(0, 0, balanceAmount, () => {
-                        setTimeout(() => {
-                            if (initOverlay) {
-                                initOverlay.classList.add('hidden');
-                            }
+                    if (balanceAmount) {
+                        animateBalance(0, 0, balanceAmount, () => {
                             setTimeout(() => {
-                                showBeginMessage();
-                            }, 600);
-                        }, 500);
-                    });
+                                if (initOverlay) {
+                                    initOverlay.classList.add('hidden');
+                                }
+                                setTimeout(() => {
+                                    showBeginMessage();
+                                }, 600);
+                            }, 500);
+                        });
+                    } else {
+                        // Directly set to 0 if element not found
+                        const balanceElement = document.getElementById('balanceAmount');
+                        if (balanceElement) {
+                            balanceElement.textContent = '0.000';
+                        }
+                        if (initOverlay) {
+                            initOverlay.classList.add('hidden');
+                        }
+                        setTimeout(() => {
+                            showBeginMessage();
+                        }, 600);
+                    }
                 }, 800);
             }
         }
 
         function animateBalance(start, end, element, callback) {
+            if (!element) {
+                console.error('animateBalance: element is null!');
+                if (callback) callback();
+                return;
+            }
+            
             const duration = 2000; // 2 seconds
             const steps = 60;
             const increment = (end - start) / steps;
             const stepDuration = duration / steps;
             let current = start;
             let step = 0;
+
+            console.log('animateBalance: animating from', start, 'to', end);
 
             const timer = setInterval(() => {
                 step++;
@@ -3284,14 +3342,23 @@
                 if (step >= steps) {
                     current = end;
                     clearInterval(timer);
+                    // Ensure final value is set
+                    if (element) {
+                        element.textContent = current.toLocaleString('en-US', {
+                            minimumFractionDigits: 3,
+                            maximumFractionDigits: 3
+                        });
+                    }
                     if (callback) callback();
+                } else {
+                    // Format number with commas and 3 decimal places
+                    if (element) {
+                        element.textContent = current.toLocaleString('en-US', {
+                            minimumFractionDigits: 3,
+                            maximumFractionDigits: 3
+                        });
+                    }
                 }
-                
-                // Format number with commas and 3 decimal places
-                element.textContent = current.toLocaleString('en-US', {
-                    minimumFractionDigits: 3,
-                    maximumFractionDigits: 3
-                });
             }, stepDuration);
         }
 
