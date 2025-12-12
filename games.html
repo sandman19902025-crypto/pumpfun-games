@@ -3250,42 +3250,61 @@
                     }
                 }
                 
-                // Start balance animation after a short delay
-                setTimeout(() => {
-                    if (balanceAmount) {
-                        console.log('Starting balance animation from 0 to', balance);
-                        animateBalance(0, balance, balanceAmount, () => {
-                            console.log('Balance animation complete');
-                            SoundEffects.playReveal(); // Play reveal sound when balance loads
-                            // Hide initializing overlay when animation completes
-                            setTimeout(() => {
-                                if (initOverlay) {
-                                    initOverlay.classList.add('hidden');
-                                }
-                                // Show begin message after a short delay
-                                setTimeout(() => {
-                                    showBeginMessage();
-                                }, 600);
-                            }, 500);
-                        });
-                    } else {
-                        console.error('Cannot animate balance - element not found');
-                        // Directly set balance if element exists but animation fails
-                        const balanceElement = document.getElementById('balanceAmount');
-                        if (balanceElement) {
-                            balanceElement.textContent = balance.toLocaleString('en-US', {
-                                minimumFractionDigits: 3,
-                                maximumFractionDigits: 3
-                            });
-                        }
-                        if (initOverlay) {
-                            initOverlay.classList.add('hidden');
-                        }
+                // Display balance immediately (even if 0) - then animate if balance > 0
+                if (balanceAmount) {
+                    // Set initial display
+                    balanceAmount.textContent = '0.000';
+                    console.log('Balance element found, setting initial value');
+                    
+                    // If balance is 0, skip animation and show immediately
+                    if (balance === 0) {
+                        console.log('Balance is 0, displaying immediately');
+                        balanceAmount.textContent = '0.000';
                         setTimeout(() => {
-                            showBeginMessage();
-                        }, 600);
+                            if (initOverlay) {
+                                initOverlay.classList.add('hidden');
+                            }
+                            setTimeout(() => {
+                                showBeginMessage();
+                            }, 600);
+                        }, 500);
+                    } else {
+                        // Start balance animation after a short delay for non-zero balances
+                        setTimeout(() => {
+                            console.log('Starting balance animation from 0 to', balance);
+                            animateBalance(0, balance, balanceAmount, () => {
+                                console.log('Balance animation complete, final value:', balance);
+                                SoundEffects.playReveal(); // Play reveal sound when balance loads
+                                // Hide initializing overlay when animation completes
+                                setTimeout(() => {
+                                    if (initOverlay) {
+                                        initOverlay.classList.add('hidden');
+                                    }
+                                    // Show begin message after a short delay
+                                    setTimeout(() => {
+                                        showBeginMessage();
+                                    }, 600);
+                                }, 500);
+                            });
+                        }, 800);
                     }
-                }, 800);
+                } else {
+                    console.error('balanceAmount element not found!');
+                    // Try to find it and set directly
+                    const balanceElement = document.getElementById('balanceAmount');
+                    if (balanceElement) {
+                        balanceElement.textContent = balance.toLocaleString('en-US', {
+                            minimumFractionDigits: 3,
+                            maximumFractionDigits: 3
+                        });
+                    }
+                    if (initOverlay) {
+                        initOverlay.classList.add('hidden');
+                    }
+                    setTimeout(() => {
+                        showBeginMessage();
+                    }, 600);
+                }
             } catch (error) {
                 clearTimeout(timeoutId); // Clear timeout on error
                 console.error('Failed to fetch balance:', error);
